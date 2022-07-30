@@ -45,8 +45,8 @@ public class FileUploadService {
             throws IOException {
         byte[] bytes = IOUtils.toByteArray(inputStream);
         File customDir = new File(UPLOAD_DIR);
-        fileName = customDir.getAbsolutePath() +
-                File.separator + fileName;
+
+        fileName = customDir.getAbsolutePath() + File.separator + fileName;
         Files.write(Paths.get(fileName), bytes,
                 StandardOpenOption.CREATE_NEW);
     }

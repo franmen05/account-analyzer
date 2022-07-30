@@ -21,8 +21,7 @@ public class MultiFileUploadController {
     @Path("/files")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response fileUpload(@MultipartForm MultipartFormDataInput
-                                       input) {
+    public Response fileUpload(@MultipartForm MultipartFormDataInput input) {
         return Response.ok().
                 entity(fileUploadService.uploadFile(input)).build();
     }
