@@ -1,6 +1,6 @@
 package com.guille.web;
 
-import com.guille.domain.Account;
+import com.guille.domain.Transaction;
 import com.guille.service.FileUploadService;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -20,15 +20,15 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() throws CsvValidationException, IOException {
-        var transactions=fileUploadService.readPopularCSV();
+        var transactions=fileUploadService.readPopularCSV("");
 
         var InterestFinancing=transactions.stream()
                 .filter(account -> account.Desc().equalsIgnoreCase("Interes Financiamiento"))
-                .map(Account::amount)
+                .map(Transaction::amount)
                 .reduce(0.0f, Float::sum);
         var InterestFinancing2=transactions.stream()
                 .filter(account -> account.referenceNumber()==0)
-                .map(Account::amount)
+                .map(Transaction::amount)
                 .reduce(0.0f, Float::sum);
 
         System.out.println(InterestFinancing);
