@@ -57,13 +57,11 @@ public class FileUploadService {
     }
 
     private String getFileName(MultivaluedMap<String, String> header) {
-        String[] contentDisposition = header.
-                getFirst("Content-Disposition").split(";");
+        String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
         for (String filename : contentDisposition) {
             if ((filename.trim().startsWith("filename"))) {
                 var name = filename.split("=");
-                var finalFileName = name[1].trim().replaceAll("\"", "");
-                return finalFileName;
+                return name[1].trim().replaceAll("\"", "");
             }
         }
         return "";
