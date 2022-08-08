@@ -4,7 +4,8 @@ import org.apache.commons.io.IOUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import javax.inject.Singleton;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Singleton
+@ApplicationScoped
 public class FileUploadService {
 
     @ConfigProperty(name = "upload.directory")
@@ -56,8 +57,8 @@ public class FileUploadService {
                 getFirst("Content-Disposition").split(";");
         for (String filename : contentDisposition) {
             if ((filename.trim().startsWith("filename"))) {
-                String[] name = filename.split("=");
-                String finalFileName = name[1].trim().replaceAll("\"", "");
+                var name = filename.split("=");
+                var finalFileName = name[1].trim().replaceAll("\"", "");
                 return finalFileName;
             }
         }
