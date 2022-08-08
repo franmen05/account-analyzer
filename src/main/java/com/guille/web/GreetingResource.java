@@ -22,17 +22,17 @@ public class GreetingResource {
     public String hello() throws CsvValidationException, IOException {
         var transactions=fileUploadService.readPopularCSV();
 
-        var interesFinanciamiento=transactions.stream()
+        var InterestFinancing=transactions.stream()
                 .filter(account -> account.Desc().equalsIgnoreCase("Interes Financiamiento"))
                 .map(Account::amount)
                 .reduce(0.0f, Float::sum);
-        var interesFinanciamiento2=transactions.stream()
+        var InterestFinancing2=transactions.stream()
                 .filter(account -> account.referenceNumber()==0)
                 .map(Account::amount)
                 .reduce(0.0f, Float::sum);
 
-        System.out.println(interesFinanciamiento);
-        System.out.println(interesFinanciamiento2);
+        System.out.println(InterestFinancing);
+        System.out.println(InterestFinancing2);
         return "Hello RESTEasy";
     }
 }
