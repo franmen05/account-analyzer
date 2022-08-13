@@ -67,36 +67,5 @@ public class FileUploadService {
         return "";
     }
 
-    public List<Transaction> readPopularCSV(String filePath) throws IOException, CsvValidationException {
-
-        var reader = new CSVReader(new FileReader(filePath));
-//        var reader = new CSVReader(new FileReader(UPLOAD_DIR+"/pdcsvexport.csv"));
-
-        var transactions = new ArrayList<Transaction>();
-
-
-        for(int i=0;i<11;i++)
-            reader.readNext();
-
-        // read line by line
-        String[] record = null;
-        while ((record = reader.readNext()) != null) {
-            if("".equals(record[1].trim()))
-                break;
-            var a = new Transaction(record[0],
-                    record[1],
-                    Float.parseFloat(record[2]),
-                    Integer.parseInt(record[3]),
-                    record[4],
-                    record[5]);
-            transactions.add(a);
-//            System.out.println(Arrays.toString(record));
-            System.out.println(a);
-        }
-
-
-        reader.close();
-        return transactions;
-    }
 
 }
