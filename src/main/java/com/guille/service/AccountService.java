@@ -1,23 +1,26 @@
 package com.guille.service;
 
+import com.guille.config.Constants;
 import com.guille.domain.Transaction;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @ApplicationScoped
 public class AccountService {
 
+    @Inject
+    Constants constants;
 
     public List<Transaction> readPopularCSV(String filePath) throws IOException, CsvValidationException {
 
-        var reader = new CSVReader(new FileReader(filePath));
+        var reader = new CSVReader(new FileReader(constants.uploadDir()+"/"+filePath));
         var transactions = new ArrayList<Transaction>();
         for(int i=0;i<11;i++)
             reader.readNext();
@@ -25,8 +28,11 @@ public class AccountService {
         // read line by line
         String[] record = null;
         while ((record = reader.readNext()) != null) {
-            if("".equals(record[1].trim()))
+//            System.out.println(Arrays.toString(record));
+//            System.out.println(record.length);
+            if(record.length<2 || "".equals(record[1].trim()))
                 break;
+
             var t = new Transaction(record[0],
                     record[1],
                     Float.parseFloat(record[2]),
@@ -34,7 +40,7 @@ public class AccountService {
                     record[4],
                     record[5]);
             transactions.add(t);
-//            System.out.println(Arrays.toString(record));
+
             System.out.println(t);
         }
 

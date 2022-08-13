@@ -1,17 +1,14 @@
 package com.guille.service;
 
-import com.guille.domain.Transaction;
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
+import com.guille.config.Constants;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -19,13 +16,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.List;
 
 @ApplicationScoped
 public class FileUploadService {
 
-    @ConfigProperty(name = "upload.directory")
-    String UPLOAD_DIR;
+    @Inject
+    Constants constants;
 
     public String uploadFile(MultipartFormDataInput input) {
         var uploadForm = input.getFormDataMap();
@@ -49,7 +45,7 @@ public class FileUploadService {
 
     private Path writeFile(InputStream inputStream, String fileName) throws IOException {
         byte[] bytes = IOUtils.toByteArray(inputStream);
-        File customDir = new File(UPLOAD_DIR);
+        File customDir = new File(constants.uploadDir());
         fileName = customDir.getAbsolutePath() + File.separator + fileName;
         Path path = Paths.get(fileName);
         Files.deleteIfExists(path);

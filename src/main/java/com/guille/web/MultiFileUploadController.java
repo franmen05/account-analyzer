@@ -18,7 +18,7 @@ public class MultiFileUploadController {
     FileUploadService fileUploadService;
 
     @POST
-    @Path("/files")
+//    @Path("/files")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response fileUpload(@MultipartForm MultipartFormDataInput input) {
