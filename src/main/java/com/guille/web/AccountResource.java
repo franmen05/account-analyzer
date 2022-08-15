@@ -11,7 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Path("/hello")
 public class AccountResource {
@@ -23,10 +22,10 @@ public class AccountResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() throws CsvValidationException, IOException {
 
-        var transactions=accountService.readPopularCSV("pdcsvexport.csv");
+        var transactions=accountService.readPopularCSV("pdcsvexport(1).csv");
 
-        var InterestFinancing = getInterest(transactions);
-        System.out.println("Intereses por financiamiento: " + InterestFinancing);
+        System.out.println("Intereses por financiamiento : " + getInterest(transactions));
+        System.out.println("MORA : " + getNonPaymentFee(transactions));
 
 //        System.out.println(taxes);
 
@@ -41,12 +40,20 @@ public class AccountResource {
 //
 //        if(interest==0.0f)
             var interest= transactions.stream()
-                    .filter(account -> account.Desc().equalsIgnoreCase("Interes Financiamiento") || account.Desc().equalsIgnoreCase("MORA"))
+                    .filter(account -> account.desc().equalsIgnoreCase("Interes Financiamiento"))
                     .map(Transaction::amount)
                     .reduce(0.0f, Float::sum);
 
 
         return interest;
+    }
+
+    private static Float getNonPaymentFee(List<Transaction> transactions) {
+
+        return transactions.stream()
+                .filter(account -> account.compareDesc("MORA"))
+                .map(Transaction::amount)
+                .reduce(0.0f, Float::sum);
     }
     private static Float getTaxes(List<Transaction> transactions) {
         var tax= transactions.stream()
@@ -56,7 +63,7 @@ public class AccountResource {
 
         if(tax==0.0f)
             tax= transactions.stream()
-                    .filter(account -> account.Desc().equalsIgnoreCase("Interes Financiamiento"))
+                    .filter(account -> account.desc().equalsIgnoreCase("Interes Financiamiento"))
                     .map(Transaction::amount)
                     .reduce(0.0f, Float::sum);
 

@@ -1,4 +1,4 @@
 package com.guille.domain;
 
-public record TransactionSummary(Float interest, Float taxes) {
+public record TransactionSummary(Float interest, Float taxes, Float nonPaymentFee) {
 }

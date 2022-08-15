@@ -41,7 +41,7 @@ public class AccountService {
                     record[5]);
             transactions.add(t);
 
-            System.out.println(t);
+//            System.out.println(t);
         }
 
         reader.close();
