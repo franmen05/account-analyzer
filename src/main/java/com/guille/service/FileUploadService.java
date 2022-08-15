@@ -25,14 +25,14 @@ public class FileUploadService {
 
     public String uploadFile(MultipartFormDataInput input) {
         var uploadForm = input.getFormDataMap();
-        var fileNames = new ArrayList<>();
+//        var fileNames = new ArrayList<>();
         var inputParts = uploadForm.get("file");
         String fileName = null;
         for (InputPart inputPart : inputParts) {
             try {
                 var header = inputPart.getHeaders();
                 fileName = getFileName(header);
-                fileNames.add(fileName);
+//                fileNames.add(fileName);
                 var inputStream = inputPart.getBody(InputStream.class, null);
                 return writeFile(inputStream,fileName).toString();
             } catch (Exception e) {
