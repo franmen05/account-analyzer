@@ -22,7 +22,9 @@ public class AccountResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() throws CsvValidationException, IOException {
 
-        var transactions=accountService.readPopularCSV("pdcsvexport(1).csv");
+//        var transactions= accountService.readPopularCSV("pdcsvexport.csv");
+//        var transactions= accountService.readPopularCSV("pdcsvexport(1).csv");
+        var transactions= accountService.readPopularCSV("pdcsvexport(2).csv");
 
         System.out.println("Intereses por financiamiento : " + getInterest(transactions));
         System.out.println("MORA : " + getNonPaymentFee(transactions));
@@ -59,7 +61,9 @@ public class AccountResource {
     private static Float getTaxes(List<Transaction> transactions) {
 
         return transactions.stream()
-                    .filter(account -> account.desc().equalsIgnoreCase("d"))
+                    .filter(account -> account.isSerial("1")
+                        || account.isSerial("2")
+                        || account.isSerial("3"))
                     .map(Transaction::amount)
                     .reduce(0.0f, Float::sum);
     }

@@ -6,6 +6,9 @@ public record Transaction(String date, String type, Float amount , Integer refer
     public Boolean compareDesc(String _desc) {
         return desc.equalsIgnoreCase(_desc);
     }
+    public Boolean isSerial(String _serial) {
+        return serial.equalsIgnoreCase(_serial);
+    }
     @Override
     public String toString() {
         return "Account{" +

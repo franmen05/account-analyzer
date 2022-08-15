@@ -30,18 +30,21 @@ public class AccountService {
         while ((record = reader.readNext()) != null) {
 //            System.out.println(Arrays.toString(record));
 //            System.out.println(record.length);
-            if(record.length<2 || "".equals(record[1].trim()))
+            if(record.length<2 )
                 break;
+            if(record[0].trim().equalsIgnoreCase("Fecha Posteo")
+                    || record[0].trim().equals("") )
+                continue;
 
             var t = new Transaction(record[0],
                     record[1],
-                    Float.parseFloat(record[2]),
-                    Integer.parseInt(record[3]),
+                    Float.parseFloat(record[2].isEmpty() ? "0":record[2]),
+                    Integer.parseInt(record[3].isEmpty() ? "0":record[3]),
                     record[4],
                     record[5]);
             transactions.add(t);
 
-//            System.out.println(t);
+            System.out.println(t);
         }
 
         reader.close();
