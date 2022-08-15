@@ -26,6 +26,7 @@ public class AccountResource {
 
         System.out.println("Intereses por financiamiento : " + getInterest(transactions));
         System.out.println("MORA : " + getNonPaymentFee(transactions));
+        System.out.println("Impuestos : " + getTaxes(transactions));
 
 //        System.out.println(taxes);
 
@@ -56,18 +57,10 @@ public class AccountResource {
                 .reduce(0.0f, Float::sum);
     }
     private static Float getTaxes(List<Transaction> transactions) {
-        var tax= transactions.stream()
-                .filter(account -> account.referenceNumber() == 0)
-                .map(Transaction::amount)
-                .reduce(0.0f, Float::sum);;
 
-        if(tax==0.0f)
-            tax= transactions.stream()
-                    .filter(account -> account.desc().equalsIgnoreCase("Interes Financiamiento"))
+        return transactions.stream()
+                    .filter(account -> account.desc().equalsIgnoreCase("d"))
                     .map(Transaction::amount)
                     .reduce(0.0f, Float::sum);
-
-
-        return tax;
     }
 }
