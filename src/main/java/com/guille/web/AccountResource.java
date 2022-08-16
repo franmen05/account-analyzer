@@ -42,28 +42,28 @@ public class AccountResource {
 //                .reduce(0.0f, Float::sum);;
 //
 //        if(interest==0.0f)
-            var interest= transactions.stream()
-                    .filter(account -> account.desc().equalsIgnoreCase("Interes Financiamiento"))
-                    .map(Transaction::amount)
-                    .reduce(0.0f, Float::sum);
 
 
-        return interest;
+        return transactions.stream()
+                .filter(account -> account.descContains("Interes Financiamiento"))
+                .map(Transaction::amount)
+                .reduce(0.0f, Float::sum);
     }
 
     private static Float getNonPaymentFee(List<Transaction> transactions) {
 
         return transactions.stream()
-                .filter(account -> account.compareDesc("MORA"))
+                .filter(account -> account.descContains("MORA"))
                 .map(Transaction::amount)
                 .reduce(0.0f, Float::sum);
     }
     private static Float getTaxes(List<Transaction> transactions) {
 
         return transactions.stream()
-                    .filter(account -> account.isSerial("1")
-                        || account.isSerial("2")
-                        || account.isSerial("3"))
+                    .filter(account -> account.descContains("IMPUESTO")
+                        || account.descContains("SOBREGIRO")
+                        || account.descContains("CARGO POR SERVICIO")
+                    )
                     .map(Transaction::amount)
                     .reduce(0.0f, Float::sum);
     }

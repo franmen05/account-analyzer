@@ -26,13 +26,13 @@ public class AccountService {
             reader.readNext();
 
         // read line by line
-        String[] record = null;
+        String[] record;
         while ((record = reader.readNext()) != null) {
 //            System.out.println(Arrays.toString(record));
 //            System.out.println(record.length);
             if(record.length<2 )
                 break;
-            if(record[0].trim().equalsIgnoreCase("Fecha Posteo")
+            if(record[0].trim().contains("Fecha")
                     || record[0].trim().equals("") )
                 continue;
 
@@ -42,9 +42,10 @@ public class AccountService {
                     Integer.parseInt(record[3].isEmpty() ? "0":record[3]),
                     record[4],
                     record[5]);
+
             transactions.add(t);
 
-            System.out.println(t);
+//            System.out.println(t);
         }
 
         reader.close();
