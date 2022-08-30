@@ -257,13 +257,24 @@
                     <p>Code: <code>src/main/java</code></p>
                     <p>Generated starter code:</p>
                     <ul class="provided-code">
-                                <li class="provided-code">
-            <b>RESTEasy JAX-RS</b>&nbsp;Easily start your RESTful Web Services
-            <br />&rsaquo; <code>@Path: <a href="/hello" class="path-link" target="_blank">/hello</a></code>
-            <br />&rsaquo; <a href="https://quarkus.io/guides/getting-started#the-jax-rs-resources" class="guide-link" target="_blank">Related guide</a>
-        </li>
-
+                         <li class="provided-code">
+                            <b>RESTEasy JAX-RS</b>&nbsp;Easily start your RESTful Web Services
+                            <br />&rsaquo; <code>@Path: <a href="/hello" class="path-link" target="_blank">/hello</a></code>
+                            <br />&rsaquo; <code>@Path: <a href="/upload" class="path-link" target="_blank">/upload</a></code>
+                            <br />&rsaquo; <a href="https://quarkus.io/guides/getting-started#the-jax-rs-resources" class="guide-link" target="_blank">Related guide</a>
+                        </li>
                     </ul>
+                    <br>
+
+                    <form method="post" enctype="multipart/form-data" action="upload">
+                        <div>
+                            <label for="file">Choose file to upload</label>
+                            <input type="file" id="file" name="file" multiple>
+                        </div>
+                        <div>
+                            <button>Submit</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="right-column">
                     <h3>Selected extensions</h3>
