@@ -1,6 +1,7 @@
 package com.guille.web;
 
 import com.guille.domain.Transaction;
+import com.guille.domain.TransactionSummary;
 import com.guille.service.AccountService;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -12,27 +13,31 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.List;
 
-@Path("/hello")
+@Path("/account")
 public class AccountResource {
 
     @Inject
     AccountService accountService;
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() throws CsvValidationException, IOException {
+    @Path("/analyzer")
+    @Produces(MediaType.APPLICATION_JSON)
+    public TransactionSummary hello() throws CsvValidationException, IOException {
 
 //        var transactions= accountService.readPopularCSV("pdcsvexport.csv");
 //        var transactions= accountService.readPopularCSV("pdcsvexport(1).csv");
         var transactions= accountService.readPopularCSV("pdcsvexport(2).csv");
 
-        System.out.println("Intereses por financiamiento : " + getInterest(transactions));
-        System.out.println("MORA : " + getNonPaymentFee(transactions));
-        System.out.println("Impuestos : " + getTaxes(transactions));
+        var interest = getInterest(transactions);
+        var taxes = getTaxes(transactions);
+        var nonPaymentFee = getNonPaymentFee(transactions);
+        System.out.println("Intereses por financiamiento : " + interest);
+        System.out.println("MORA : " + nonPaymentFee);
+        System.out.println("Impuestos : " + taxes);
 
 //        System.out.println(taxes);
 
-        return "Hello RESTEasy";
+        return new TransactionSummary(interest,taxes,nonPaymentFee);
     }
 
     private static Float getInterest(List<Transaction> transactions) {

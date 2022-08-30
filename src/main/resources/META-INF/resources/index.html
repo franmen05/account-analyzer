@@ -118,6 +118,17 @@
                 text-decoration: none;
                 text-transform: uppercase;
             }
+            .left-column .cta-button2{
+                margin: 2px 1px;
+                display: inline-block;
+                padding: 1rem 0.2rem;
+                background-color: #4695EB;
+                font-weight: 600;
+                color: white;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
             .right-column {
                 grid-column: span 4;
                 margin-top: 1rem;
@@ -251,43 +262,25 @@
                     <h1>You just made a Quarkus application.</h1>
                     <p>This page is served by Quarkus.</p>
                     <a href="/q/dev/" class="cta-button">Visit the Dev UI</a>
-                    <p>This page: <code>src/main/resources/META-INF/resources/index.html</code></p>
-                    <p>App configuration: <code>src/main/resources/application.properties</code></p>
-                    <p>Static assets: <code>src/main/resources/META-INF/resources/</code></p>
-                    <p>Code: <code>src/main/java</code></p>
                     <p>Generated starter code:</p>
                     <ul class="provided-code">
                          <li class="provided-code">
                             <b>RESTEasy JAX-RS</b>&nbsp;Easily start your RESTful Web Services
                             <br />&rsaquo; <code>@Path: <a href="/hello" class="path-link" target="_blank">/hello</a></code>
                             <br />&rsaquo; <code>@Path: <a href="/upload" class="path-link" target="_blank">/upload</a></code>
-                            <br />&rsaquo; <a href="https://quarkus.io/guides/getting-started#the-jax-rs-resources" class="guide-link" target="_blank">Related guide</a>
                         </li>
                     </ul>
                     <br>
 
                     <form method="post" enctype="multipart/form-data" action="upload">
                         <div>
-                            <label for="file">Choose file to upload</label>
-                            <input type="file" id="file" name="file" multiple>
-                        </div>
-                        <div>
-                            <button>Submit</button>
+                            <label for="file">Choose file to upload :</label>
+                            <br>
+                            <input class="cta-button2" type="file" id="file" name="file" multiple>
+
+                            <button class="cta-button">Submit</button>
                         </div>
                     </form>
-                </div>
-                <div class="right-column">
-                    <h3>Selected extensions</h3>
-                    <ul>
-                        <li title="Use Google Cloud Firestore NOSQL database service">Google Cloud Firestore</li>
-                        <li title="REST endpoint framework implementing JAX-RS and more">RESTEasy Classic (<a href="https://quarkus.io/guides/resteasy" target="_blank">guide</a>)</li>
-                    </ul>
-                    <h5><a href="https://quarkus.io/guides/">Documentation</a></h5>
-                    <p>Practical step-by-step guides to help you achieve a specific goal. Use them to help get your work
-                        done.</p>
-                    <h5><a href="https://quarkus.io/guides/maven-tooling">Set up your IDE</a></h5>
-                    <p>Everyone has a favorite IDE they like to use to code. Learn how to configure yours to maximize your
-                        Quarkus productivity.</p>
                 </div>
             </div>
         </div>

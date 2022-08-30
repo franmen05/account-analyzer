@@ -1,6 +1,7 @@
 package com.guille;
 
 import io.quarkus.test.junit.QuarkusTest;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -12,10 +13,10 @@ public class GreetingResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/hello")
-          .then()
-             .statusCode(200)
-             .body(is("Hello RESTEasy"));
+            .when().get("/account/analyzer")
+            .then()
+            .statusCode(200)
+            ;
     }
 
 }
