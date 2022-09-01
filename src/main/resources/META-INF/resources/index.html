@@ -196,24 +196,27 @@
             }
 
 
-            #form {
-                max-width: 600px;
-                margin: auto;
-            }
+            /*#form {*/
+            /*    max-width: 600px;*/
+            /*    margin: auto;*/
+            /*}*/
 
             #button {
-                margin-top: 50px;
-                margin-right: 20px;
-                float: right;
+                margin-top: 10px;
+                /*float: right;*/
             }
 
             #fileuploader-container {
-                border: 1px solid #d3d3d3;
-                margin: 20px 20px 0 20px;
+                border: 0.1px solid #d3d3d3;
+                /*margin: 40px 0 0;*/
+            }
+            #file-uploader {
+
+                margin: 20px 0 20px 0;
             }
 
             #form h3 {
-                margin-left: 20px;
+                /*margin-left: 20px;*/
                 font-weight: normal;
                 font-size: 22px;
             }
@@ -246,8 +249,8 @@
                         $("#form").submit();
                     },
                 });
-                const frm = $('#form');
 
+                const frm = $('#form');
                 frm.submit(function (e) {
 
                     e.preventDefault();
@@ -255,23 +258,22 @@
                     $.ajax({
                         type: frm.attr('method'),
                         url: frm.attr('action'),
-                        data: frm.serialize(),
-                        enctype: frm.attr('enctype'),
-                        cache: false,
-                        contentType: false,
+                        data:  new FormData($(frm)[0]),
                         processData: false,
-                        success: function (data) {
+                        contentType: false,
+                        cache: false,
+                        success:  (data) => {
                             console.log('Submission was successful.');
                             console.log(data);
                         },
-                        error: function (data) {
+                        error: (data) => {
                             console.log('An error occurred.');
                             console.log(data);
-                        },
+                    },
                     });
                 });
-
             });
+
 
         </script>
     </head>
@@ -342,9 +344,10 @@
             </div>
         </div>
         <div class="content-wrapper">
+
             <div class="grid">
                 <div class="left-column">
-                    <h1>You just made a Quarkus application.</h1>
+                    <h1>Account A.</h1>
                     <p>This page is served by Quarkus.</p>
                     <a href="/q/dev/" class="cta-button">Visit the Dev UI</a>
                     <p>Generated starter code:</p>
@@ -356,25 +359,26 @@
                     </ul>
                     <br>
 
-                    <form method="post" enctype="multipart/form-data" action="account/analyzer">
-                        <div>
-                            <label for="file">Choose file to upload :</label>
-                            <br>
-                            <input class="cta-button2" type="file" id="file" name="file" >
-
-                            <button class="cta-button">Submit</button>
-                        </div>
-                    </form>
-
-                    <form id="form" method="post" action="account/analyzer" enctype="multipart/form-data">
-                        <h3>Profile Settings</h3>
+                    <form id="form" method="POST" action="account/analyzer" enctype="multipart/form-data">
+                        <h3>Choose file to upload : </h3>
                         <div id="fileuploader-container">
-                            <div id="file-uploader"></div>
+                            <div id="file-uploader"> </div>
                         </div>
                         <div id="button"></div>
                     </form>
+
+<!--                    <form id="form2" method="post" enctype="multipart/form-data" action="account/analyzer">-->
+<!--                        <div>-->
+<!--                            <label for="file">Choose file to upload :</label>-->
+<!--                            <br>-->
+<!--                            <input class="cta-button2" type="file" id="file" name="file" >-->
+
+<!--                            <button class="cta-button">Submit</button>-->
+<!--                        </div>-->
+<!--                    </form>-->
                 </div>
             </div>
+
         </div>
     </body>
 </html>
