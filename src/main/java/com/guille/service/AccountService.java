@@ -30,23 +30,25 @@ public class AccountService {
         // read line by line
         String[] record;
         while ((record = reader.readNext()) != null) {
-//            System.out.println(Arrays.toString(record));
-//            System.out.println(record.length);
-            if(record.length<1 )
+            System.out.print(record.length+" :: ");
+            System.out.println(Arrays.toString(record));
+            if(record.length<=1 )
                 continue;
 
             if(record[0].trim().contains("Fecha")
                     || record[0].trim().equals("") )
                 continue;
+            try{
 
-            var t = new Transaction(record[0],
+                var t = new Transaction(record[0],
                     record[1],
                     Float.parseFloat(record[2].isEmpty() ? "0":record[2]),
                     Integer.parseInt(record[3].isEmpty() ? "0":record[3]),
                     record[4],
                     record[5]);
 
-            transactions.add(t);
+                transactions.add(t);
+            }catch (ArrayIndexOutOfBoundsException ignored){}
 
 //            System.out.println(t);
         }

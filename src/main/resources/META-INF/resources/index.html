@@ -195,20 +195,13 @@
                 }
             }
 
-
-            /*#form {*/
-            /*    max-width: 600px;*/
-            /*    margin: auto;*/
-            /*}*/
-
             #button {
                 margin-top: 10px;
                 /*float: right;*/
             }
 
-            #fileuploader-container {
+            #file-uploader-container {
                 border: 0.1px solid #d3d3d3;
-                /*margin: 40px 0 0;*/
             }
             #file-uploader {
 
@@ -216,7 +209,6 @@
             }
 
             #form h3 {
-                /*margin-left: 20px;*/
                 font-weight: normal;
                 font-size: 22px;
             }
@@ -230,29 +222,22 @@
                     selectButtonText: 'Select File',
                     name: 'file',
                     labelText: '',
-                    // uploadUrl: 'account/analyzer',
-                    // accept: 'image/*',
                     uploadMode: 'useForm',
                     multiple: false,
                     allowedFileExtensions: ['.csv'],
-                    onUploaded : function (e) {
-                        // alert(e.data.total)
-                        console.log($(e.event).target  )
-                    }
                 });
 
                 $('#button').dxButton({
-                    text: 'Update profile',
+                    text: 'Analyze ',
                     type: 'success',
                     onClick() {
-                        // DevExpress.ui.dialog.alert('Uncomment the line to enable sending a form to the server.', 'Click Handler');
-                        $("#form").submit();
+                        const confirm=DevExpress.ui.dialog.confirm('Is file correct?.')
+                        confirm.done((dialogResult)=> dialogResult?$("#form").submit():'');
                     },
                 });
 
                 const frm = $('#form');
                 frm.submit(function (e) {
-
                     e.preventDefault();
 
                     $.ajax({
@@ -263,17 +248,21 @@
                         contentType: false,
                         cache: false,
                         success:  (data) => {
-                            console.log('Submission was successful.');
-                            console.log(data);
+                            console.info('Submission was successful.');
+                            console.debug(data);
+                            $('#taxes').text(data.taxes)
+                            $('#commissions').text(data.commissions)
+                            $('#nonPaymentFee').text(data.nonPaymentFee)
+                            $('#interest').text(data.interest)
+                            $('#total').text(data.total)
                         },
                         error: (data) => {
-                            console.log('An error occurred.');
-                            console.log(data);
+                            console.debug('An error occurred.');
+                            console.error(data);
                     },
                     });
                 });
             });
-
 
         </script>
     </head>
@@ -329,13 +318,13 @@
             <div class="grid">
                 <div class="banner">
                     <div class="grid">
-                        <div class="callout">Congratulations!</div>
+                        <div class="callout">Account Analyzer!</div>
                         <div class="app-details">
-                            <h5>Application</h5>
+                            <h5>Application Info</h5>
                             <ul>
                                 <li>GroupId: <code>com.guille</code></li>
                                 <li>ArtifactId: <code>account-analyzer</code></li>
-                                <li>Version: <code>1.0.0-SNAPSHOT</code></li>
+                                <li>Version: <code>0.2</code></li>
                                 <li>Quarkus Version: <code>2.10.3.Final</code></li>
                             </ul>
                         </div>
@@ -347,26 +336,32 @@
 
             <div class="grid">
                 <div class="left-column">
-                    <h1>Account A.</h1>
-                    <p>This page is served by Quarkus.</p>
-                    <a href="/q/dev/" class="cta-button">Visit the Dev UI</a>
-                    <p>Generated starter code:</p>
-                    <ul class="provided-code">
-                         <li class="provided-code">
-                            <b>RESTEasy JAX-RS</b>&nbsp;Easily start your RESTful Web Services
-                            <br />&rsaquo; <code>@Path: <a href="/account/analyzer" class="path-link" target="_blank">/upload</a></code>
-                        </li>
-                    </ul>
-                    <br>
+
+<!--                    <h1>Account Analyzer</h1>-->
 
                     <form id="form" method="POST" action="account/analyzer" enctype="multipart/form-data">
-                        <h3>Choose file to upload : </h3>
-                        <div id="fileuploader-container">
+                        <p>Choose file to upload : </p>
+                        <div id="file-uploader-container">
                             <div id="file-uploader"> </div>
                         </div>
                         <div id="button"></div>
                     </form>
 
+                    <h3>Result of Analyze </h3>
+
+                    <ul class="provided-code">
+                        <p>Commissions : <span id="commissions"></span> </p>
+                        <p>Interest : <span id="interest"></span></p>
+                        <p>NonPaymentFee : <span id="nonPaymentFee"></span></p>
+                        <p>Taxes : <span id="taxes"></span></p>
+
+<!--                        <li class="provided-code">-->
+<!--                            <b>RESTEasy JAX-RS</b>&nbsp;Easily start your RESTful Web Services-->
+<!--                            <br />&rsaquo; <code>@Path: <a href="/account/analyzer" class="path-link" target="_blank">/upload</a></code>-->
+<!--                        </li>-->
+                    </ul>
+                    <br>
+                    <p> <b>Total :</b> <span id="total"></span></p>
 <!--                    <form id="form2" method="post" enctype="multipart/form-data" action="account/analyzer">-->
 <!--                        <div>-->
 <!--                            <label for="file">Choose file to upload :</label>-->
