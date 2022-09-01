@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
+        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.common.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.dark.css" />
+        <script src="https://cdn3.devexpress.com/jslib/22.1.4/js/dx.all.js"></script>
+
         <meta charset="UTF-8">
         <title>account-analyzer - 1.0.0-SNAPSHOT</title>
         <style>
@@ -188,7 +194,86 @@
                     grid-column: span 12;
                 }
             }
+
+
+            #form {
+                max-width: 600px;
+                margin: auto;
+            }
+
+            #button {
+                margin-top: 50px;
+                margin-right: 20px;
+                float: right;
+            }
+
+            #fileuploader-container {
+                border: 1px solid #d3d3d3;
+                margin: 20px 20px 0 20px;
+            }
+
+            #form h3 {
+                margin-left: 20px;
+                font-weight: normal;
+                font-size: 22px;
+            }
+
         </style>
+
+        <script>
+            $(() => {
+
+                $('#file-uploader').dxFileUploader({
+                    selectButtonText: 'Select File',
+                    name: 'file',
+                    labelText: '',
+                    // uploadUrl: 'account/analyzer',
+                    // accept: 'image/*',
+                    uploadMode: 'useForm',
+                    multiple: false,
+                    allowedFileExtensions: ['.csv'],
+                    onUploaded : function (e) {
+                        // alert(e.data.total)
+                        console.log($(e.event).target  )
+                    }
+                });
+
+                $('#button').dxButton({
+                    text: 'Update profile',
+                    type: 'success',
+                    onClick() {
+                        // DevExpress.ui.dialog.alert('Uncomment the line to enable sending a form to the server.', 'Click Handler');
+                        $("#form").submit();
+                    },
+                });
+                const frm = $('#form');
+
+                frm.submit(function (e) {
+
+                    e.preventDefault();
+
+                    $.ajax({
+                        type: frm.attr('method'),
+                        url: frm.attr('action'),
+                        data: frm.serialize(),
+                        enctype: frm.attr('enctype'),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log('Submission was successful.');
+                            console.log(data);
+                        },
+                        error: function (data) {
+                            console.log('An error occurred.');
+                            console.log(data);
+                        },
+                    });
+                });
+
+            });
+
+        </script>
     </head>
     <body>
         <div class="header-wrapper">
@@ -275,10 +360,18 @@
                         <div>
                             <label for="file">Choose file to upload :</label>
                             <br>
-                            <input class="cta-button2" type="file" id="file" name="file" multiple>
+                            <input class="cta-button2" type="file" id="file" name="file" >
 
                             <button class="cta-button">Submit</button>
                         </div>
+                    </form>
+
+                    <form id="form" method="post" action="account/analyzer" enctype="multipart/form-data">
+                        <h3>Profile Settings</h3>
+                        <div id="fileuploader-container">
+                            <div id="file-uploader"></div>
+                        </div>
+                        <div id="button"></div>
                     </form>
                 </div>
             </div>
