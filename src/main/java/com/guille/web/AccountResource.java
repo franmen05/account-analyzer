@@ -92,6 +92,8 @@ public class AccountResource {
                     .filter(account -> account.descContains("SOBREGIRO")
                         || account.descContains("CARGO POR SERVICIO")
                         || account.descContains("CARGO POR SERV")
+                        || account.descContains("CARGO EMISION")
+                        || account.descContains("PERDIDA")
                         || account.descContains("COMISIONES")
                     )
                     .map(Transaction::amount)
