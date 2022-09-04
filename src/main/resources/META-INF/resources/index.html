@@ -26,8 +26,9 @@
                     text: 'Analyze ',
                     type: 'success',
                     onClick() {
-                        const confirm=DevExpress.ui.dialog.confirm('Is file correct?.')
-                        confirm.done((dialogResult)=> dialogResult?$("#form").submit():'');
+                        // const confirm=DevExpress.ui.dialog.confirm('Is file correct?.')
+                        // confirm.done((dialogResult)=> dialogResult?$("#form").submit():'');
+                        $("#form").submit();
                     },
                 });
 
