@@ -2,6 +2,8 @@ package com.guille.service;
 
 import com.guille.config.Constants;
 import com.guille.domain.Transaction;
+import com.guille.domain.TransactionSummary;
+import com.guille.web.TransactionType;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -11,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @ApplicationScoped
@@ -55,5 +58,65 @@ public class AccountService {
 
         reader.close();
         return transactions;
+    }
+
+
+    public TransactionSummary getTransactionSummary(List<Transaction> transactions, TransactionType type) {
+
+        var  transactionDesList= new HashSet<String>();
+        var total = 0f;
+
+        if(type==TransactionType.COMMISSIONS) {
+
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("SOBREGIRO")
+                                    || account.descContains("CARGO POR SERVICIO")
+                                    || account.descContains("CARGO POR SERV")
+                                    || account.descContains("CARGO EMISION")
+                                    || account.descContains("PERDIDA")
+                                    || account.descContains("COMISIONES")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }else if(type==TransactionType.TAXES) {
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("IMPUESTO")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }else if(type==TransactionType.INTEREST) {
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("Interes")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }else if(type==TransactionType.NON_PAYMENT_FEE) {
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("MORA")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }
+        return new TransactionSummary(transactionDesList,total);
     }
 }

@@ -47,40 +47,11 @@
                             console.info('Submission was successful.');
                             console.debug(data);
 
-                            // $('#interestTrans').html(``)
-                            // $('#commissionsTrans').html(``)
-                            //
-                            // const taxes = data.taxes;
-                            // if(taxes.total!=0){
-                            //     const trans = $('#taxesTrans');
-                            //     trans.html(``);
-                            //
-                            //     taxes.transactionsDesc.forEach((desc)=>  trans.append(`  <li>${desc}</li> `))
-                            //     trans.append(`<br> `)
-                            //     trans.append(`<span class="text-category"> TOTAL : ${taxes.total}</span>`)
-                            // }
-                            //
-                            // const commissions = data.commissions;
-                            // // $('#commissions').text(commissions.total);
-                            // if(commissions.total!=0){
-                            //     const trans = $('#commissionsTrans');
-                            //     trans.html(``);
-                            //     commissions.transactionsDesc.forEach((desc)=>  trans.append(`  <li>${desc}</li> `))
-                            //     trans.append(`<br> `)
-                            //     trans.append(`<span class="text-category"> TOTAL : ${taxes.total}</span>`)
-                            // }
                             addTransactionsDetail($('#commissions'),$('#commissionsTrans'),data.commissions);
                             addTransactionsDetail($('#interest'),$('#interestTrans'),data.interest);
                             addTransactionsDetail($('#taxes'),$('#taxesTrans'),data.taxes);
                             addTransactionsDetail($('#nonPaymentFee'),$('#nonPaymentFeeTrans'),data.nonPaymentFee);
 
-                            // $('#nonPaymentFee') .append(`<span>${data.nonPaymentFee}</span>`)
-                            // $('#interest').text(data.interest.total)
-                            //
-                            // if(data.interest.total!=0){
-                            //     data.interest.transactionsDesc.forEach((desc)=>  $('#').append(`  <li>${desc}</li> `))
-                            //     $('#interestTrans').append(`  <br> `)
-                            // }
 
 
                             $('#total').text(data.total)
@@ -181,7 +152,7 @@
             <div class="grid">
                 <div class="left-column">
 
-                    <form id="form" method="POST" action="account/analyzer" enctype="multipart/form-data">
+                    <form id="form" method="POST" action="account/analyze" enctype="multipart/form-data">
                         <p>Choose file to upload : </p>
                         <div id="file-uploader-container">
                             <div id="file-uploader"> </div>
