@@ -41,10 +41,10 @@ public class AccountResource {
 //        var transactions= accountService.readPopularCSV("pdcsvexport(2).csv");
         var transactions= accountService.readPopularCSV(fileName);
 
-        var interest = getInterest(transactions);
-        var taxes = getTaxes(transactions);
-        var nonPaymentFee = getNonPaymentFee(transactions);
-        var commissions = getCommissions(transactions);
+        var interest =  getTransactionSummary(transactions,TransactionType.INTEREST);
+        var taxes = getTransactionSummary(transactions,TransactionType.TAXES);
+        var nonPaymentFee = getTransactionSummary(transactions,TransactionType.NON_PAYMENT_FEE);
+        var commissions = getTransactionSummary(transactions,TransactionType.COMMISSIONS);
         System.out.println("Intereses por financiamiento : " + interest.total());
         System.out.println("MORA : " + nonPaymentFee);
         System.out.println("Impuestos : " + taxes);
@@ -53,6 +53,66 @@ public class AccountResource {
 //        System.out.println(taxes);
 
         return  Summary.build(interest,taxes,nonPaymentFee,commissions);
+    }
+
+
+    private static TransactionSummary getTransactionSummary(List<Transaction> transactions,TransactionType type) {
+
+        var  transactionDesList= new HashSet<String>();
+        var total = 0f;
+
+        if(type==TransactionType.COMMISSIONS) {
+
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("SOBREGIRO")
+                            || account.descContains("CARGO POR SERVICIO")
+                            || account.descContains("CARGO POR SERV")
+                            || account.descContains("CARGO EMISION")
+                            || account.descContains("PERDIDA")
+                            || account.descContains("COMISIONES")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }else if(type==TransactionType.TAXES) {
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("IMPUESTO")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }else if(type==TransactionType.INTEREST) {
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("Interes")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }else if(type==TransactionType.NON_PAYMENT_FEE) {
+            total = transactions.stream()
+                    .filter(
+                            account -> account.descContains("MORA")
+                    )
+                    .map(t -> {
+                        transactionDesList.add(t.desc());
+                        return t.amount();
+                    })
+                    .reduce(0.0f, Float::sum);
+
+        }
+        return new TransactionSummary(transactionDesList,total);
     }
 
     private static TransactionSummary getInterest(List<Transaction> transactions) {

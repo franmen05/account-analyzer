@@ -184,6 +184,10 @@ a:hover, a:active { color: #c00; }
     }
 }
 
+.text-category{
+    font-weight: bold;
+}
+
 #button {
     margin-top: 10px;
     /*float: right;*/

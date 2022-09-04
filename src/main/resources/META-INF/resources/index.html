@@ -46,12 +46,41 @@
                         success:  (data) => {
                             console.info('Submission was successful.');
                             console.debug(data);
-                            $('#taxes').text(data.taxes)
-                            $('#commissions').text(data.commissions)
-                            $('#nonPaymentFee').text(data.nonPaymentFee)
-                            $('#interest').text(data.interest.total)
-                            data.interest.transactionsDesc.forEach((desc)=>  $('#interestTrans').append(`  <li>${desc}</li> `))
-                            $('#interestTrans').append(`  <br> `)
+
+                            // $('#interestTrans').html(``)
+                            // $('#commissionsTrans').html(``)
+                            //
+                            // const taxes = data.taxes;
+                            // if(taxes.total!=0){
+                            //     const trans = $('#taxesTrans');
+                            //     trans.html(``);
+                            //
+                            //     taxes.transactionsDesc.forEach((desc)=>  trans.append(`  <li>${desc}</li> `))
+                            //     trans.append(`<br> `)
+                            //     trans.append(`<span class="text-category"> TOTAL : ${taxes.total}</span>`)
+                            // }
+                            //
+                            // const commissions = data.commissions;
+                            // // $('#commissions').text(commissions.total);
+                            // if(commissions.total!=0){
+                            //     const trans = $('#commissionsTrans');
+                            //     trans.html(``);
+                            //     commissions.transactionsDesc.forEach((desc)=>  trans.append(`  <li>${desc}</li> `))
+                            //     trans.append(`<br> `)
+                            //     trans.append(`<span class="text-category"> TOTAL : ${taxes.total}</span>`)
+                            // }
+                            addTransactionsDetail($('#commissionsTrans'),data.commissions);
+                            addTransactionsDetail($('#interestTrans'),data.interest);
+                            addTransactionsDetail($('#taxesTrans'),data.taxes);
+                            addTransactionsDetail($('#nonPaymentFeeTrans'),data.nonPaymentFee);
+
+                            // $('#nonPaymentFee') .append(`<span>${data.nonPaymentFee}</span>`)
+                            // $('#interest').text(data.interest.total)
+                            //
+                            // if(data.interest.total!=0){
+                            //     data.interest.transactionsDesc.forEach((desc)=>  $('#').append(`  <li>${desc}</li> `))
+                            //     $('#interestTrans').append(`  <br> `)
+                            // }
 
 
                             $('#total').text(data.total)
@@ -63,6 +92,17 @@
                     });
                 });
             });
+
+            const addTransactionsDetail= (idContainer, data)=> {
+                idContainer.html(``);
+                if (data.total != 0) {
+
+                    data.transactionsDesc.forEach((desc) => idContainer.append(`  <li>${desc}</li> `))
+                    idContainer.append(`<br> `)
+                    idContainer.append(`<span class="text-category"> TOTAL : ${data.total}</span>`)
+
+                }
+            }
 
         </script>
     </head>
@@ -145,19 +185,21 @@
                         <div id="button"></div>
                     </form>
 
-                    <h3>Result of Analyze </h3>
+                    <h3>Result of Analysis : </h3>
 
                     <ul class="provided-code">
-                        <li>Commissions : <span id="commissions"></span> </li>
-                        <li>Interest : <span id="interest"></span></li>
-
-                            <ul id="interestTrans" class="provided-code">
-
-                            </ul>
-
-
-                        <li>NonPaymentFee : <span id="nonPaymentFee"></span></li>
-                        <li>Taxes : <span id="taxes"></span></li>
+                        <li class="text-category">Commissions :
+                            <ul id="commissionsTrans" class="provided-code"></ul>
+                        </li>
+                        <li class="text-category" >Interest :
+                            <ul id="interestTrans" class="provided-code"></ul>
+                        </li>
+                        <li class="text-category" >NonPaymentFee :
+                            <ul id="nonPaymentFeeTrans" class="provided-code"></ul>
+                        </li>
+                        <li class="text-category">Taxes :
+                            <ul id="taxesTrans" class="provided-code"></ul>
+                        </li>
                     </ul>
                     <br>
                     <p> <b>Total :</b> <span id="total"></span></p>
