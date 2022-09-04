@@ -186,10 +186,16 @@ a:hover, a:active { color: #c00; }
 
 .text-category{
     font-weight: bold;
+    margin-top: 2px;
+}
+
+.text-bold{
+    font-weight: bold;
+    font-size: 16px;
 }
 
 #button {
-    margin-top: 10px;
+    margin-top: 16px;
     /*float: right;*/
 }
 

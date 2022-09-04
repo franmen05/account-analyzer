@@ -69,10 +69,10 @@
                             //     trans.append(`<br> `)
                             //     trans.append(`<span class="text-category"> TOTAL : ${taxes.total}</span>`)
                             // }
-                            addTransactionsDetail($('#commissionsTrans'),data.commissions);
-                            addTransactionsDetail($('#interestTrans'),data.interest);
-                            addTransactionsDetail($('#taxesTrans'),data.taxes);
-                            addTransactionsDetail($('#nonPaymentFeeTrans'),data.nonPaymentFee);
+                            addTransactionsDetail($('#commissions'),$('#commissionsTrans'),data.commissions);
+                            addTransactionsDetail($('#interest'),$('#interestTrans'),data.interest);
+                            addTransactionsDetail($('#taxes'),$('#taxesTrans'),data.taxes);
+                            addTransactionsDetail($('#nonPaymentFee'),$('#nonPaymentFeeTrans'),data.nonPaymentFee);
 
                             // $('#nonPaymentFee') .append(`<span>${data.nonPaymentFee}</span>`)
                             // $('#interest').text(data.interest.total)
@@ -93,13 +93,17 @@
                 });
             });
 
-            const addTransactionsDetail= (idContainer, data)=> {
-                idContainer.html(``);
+            const addTransactionsDetail= (parentContainer,idContainer, data)=> {
+                idContainer.empty();
                 if (data.total != 0) {
 
-                    data.transactionsDesc.forEach((desc) => idContainer.append(`  <li>${desc}</li> `))
+                    parentContainer.show()
+                    data.transactionsDesc.forEach((desc) => idContainer.append(`<li>${desc}</li> `))
                     idContainer.append(`<br> `)
-                    idContainer.append(`<span class="text-category"> TOTAL : ${data.total}</span>`)
+                    idContainer.append(`<span class="text-bold"> Total : $ ${data.total}</span>`)
+
+                }else{
+                    parentContainer.hide()
 
                 }
             }
@@ -188,16 +192,16 @@
                     <h3>Result of Analysis : </h3>
 
                     <ul class="provided-code">
-                        <li class="text-category">Commissions :
+                        <li id="commissions" class="text-category">Commissions :
                             <ul id="commissionsTrans" class="provided-code"></ul>
                         </li>
-                        <li class="text-category" >Interest :
+                        <li id="interest" class="text-category" >Interest :
                             <ul id="interestTrans" class="provided-code"></ul>
                         </li>
-                        <li class="text-category" >NonPaymentFee :
+                        <li id="nonPaymentFee" class="text-category" >NonPaymentFee :
                             <ul id="nonPaymentFeeTrans" class="provided-code"></ul>
                         </li>
-                        <li class="text-category">Taxes :
+                        <li id="taxes" class="text-category">Taxes :
                             <ul id="taxesTrans" class="provided-code"></ul>
                         </li>
                     </ul>
