@@ -48,7 +48,11 @@
                             $('#taxes').text(data.taxes)
                             $('#commissions').text(data.commissions)
                             $('#nonPaymentFee').text(data.nonPaymentFee)
-                            $('#interest').text(data.interest)
+                            $('#interest').text(data.interest.total)
+                            data.interest.transactionsDesc.forEach((desc)=>  $('#interestTrans').append(`  <li>${desc}</li> `))
+                            $('#interestTrans').append(`  <br> `)
+
+
                             $('#total').text(data.total)
                         },
                         error: (data) => {
@@ -143,10 +147,16 @@
                     <h3>Result of Analyze </h3>
 
                     <ul class="provided-code">
-                        <p>Commissions : <span id="commissions"></span> </p>
-                        <p>Interest : <span id="interest"></span></p>
-                        <p>NonPaymentFee : <span id="nonPaymentFee"></span></p>
-                        <p>Taxes : <span id="taxes"></span></p>
+                        <li>Commissions : <span id="commissions"></span> </li>
+                        <li>Interest : <span id="interest"></span></li>
+
+                            <ul id="interestTrans" class="provided-code">
+
+                            </ul>
+
+
+                        <li>NonPaymentFee : <span id="nonPaymentFee"></span></li>
+                        <li>Taxes : <span id="taxes"></span></li>
                     </ul>
                     <br>
                     <p> <b>Total :</b> <span id="total"></span></p>

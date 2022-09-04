@@ -99,7 +99,7 @@ a:hover, a:active { color: #c00; }
 .left-column ul {
     margin: 0;
     padding: 10px 0 0 25px;
-    list-style-type: "\1F680";
+    /*list-style-type: "\1F680";*/
     font-weight: 300;
 }
 .left-column li { padding-left: 10px; }

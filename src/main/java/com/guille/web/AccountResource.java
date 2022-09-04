@@ -1,5 +1,6 @@
 package com.guille.web;
 
+import com.guille.domain.Summary;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
 import com.guille.service.AccountService;
@@ -9,13 +10,12 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 @Path("/account")
@@ -30,7 +30,7 @@ public class AccountResource {
     @POST
     @Path("/analyzer")
     @Produces(MediaType.APPLICATION_JSON)
-    public TransactionSummary analyzer(@MultipartForm MultipartFormDataInput file) throws CsvValidationException, IOException {
+    public Summary analyzer(@MultipartForm MultipartFormDataInput file) throws CsvValidationException, IOException {
 
         var  fileName=fileUploadService.uploadFile(file);
 
@@ -45,22 +45,29 @@ public class AccountResource {
         var taxes = getTaxes(transactions);
         var nonPaymentFee = getNonPaymentFee(transactions);
         var commissions = getCommissions(transactions);
-        System.out.println("Intereses por financiamiento : " + interest);
+        System.out.println("Intereses por financiamiento : " + interest.total());
         System.out.println("MORA : " + nonPaymentFee);
         System.out.println("Impuestos : " + taxes);
         System.out.println("Comisiones : " + commissions);
 
 //        System.out.println(taxes);
 
-        return  TransactionSummary.build(interest,taxes,nonPaymentFee,commissions);
+        return  Summary.build(interest,taxes,nonPaymentFee,commissions);
     }
 
-    private static Float getInterest(List<Transaction> transactions) {
+    private static TransactionSummary getInterest(List<Transaction> transactions) {
 
-        return transactions.stream()
+        var  transactionDesList= new HashSet<String>();
+
+        var  total= transactions.stream()
                 .filter(account -> account.descContains("Interes"))
-                .map(Transaction::amount)
+                .map(t ->{
+                    transactionDesList.add(t.desc());
+                    return t.amount();
+                } )
                 .reduce(0.0f, Float::sum);
+
+        return new TransactionSummary(transactionDesList,total);
     }
 
     private static Float getNonPaymentFee(List<Transaction> transactions) {
