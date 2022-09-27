@@ -1,9 +1,9 @@
 package com.guille.web;
 
 import com.guille.domain.Summary;
-import com.guille.domain.Transaction;
-import com.guille.domain.TransactionSummary;
+import com.guille.domain.TransactionType;
 import com.guille.service.AccountService;
+import com.guille.service.PopularAccountService;
 import com.guille.service.FileUploadService;
 import com.opencsv.exceptions.CsvValidationException;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
@@ -15,8 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
 
 @Path("/account")
 public class AccountResource {
@@ -39,9 +37,9 @@ public class AccountResource {
 //        var transactions= accountService.readPopularCSV("pdcsvexport.csv");
 //        var transactions= accountService.readPopularCSV("pdcsvexport(1).csv");
 //        var transactions= accountService.readPopularCSV("pdcsvexport(2).csv");
-        var transactions= accountService.readPopularCSV(fileName);
+        var transactions= accountService.readCSV(fileName);
 
-        var interest =  accountService.getTransactionSummary(transactions,TransactionType.INTEREST);
+        var interest =  accountService.getTransactionSummary(transactions, TransactionType.INTEREST);
         var taxes = accountService.getTransactionSummary(transactions,TransactionType.TAXES);
         var nonPaymentFee = accountService.getTransactionSummary(transactions,TransactionType.NON_PAYMENT_FEE);
         var commissions = accountService.getTransactionSummary(transactions,TransactionType.COMMISSIONS);

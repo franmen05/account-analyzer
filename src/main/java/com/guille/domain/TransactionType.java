@@ -1,4 +1,4 @@
-package com.guille.web;
+package com.guille.domain;
 
 public enum TransactionType {
     COMMISSIONS,
