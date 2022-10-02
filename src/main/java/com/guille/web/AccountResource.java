@@ -58,7 +58,7 @@ public class AccountResource {
 
 //        System.out.println(bank);
         accountService = getAccountService(bank);
-        System.out.println(accountService   );
+//        System.out.println(accountService   );
 
         var  fileName=fileUploadService.uploadFile(file);
 
