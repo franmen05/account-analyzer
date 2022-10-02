@@ -57,11 +57,8 @@ public class AccountResource {
         var bank = file.getFormDataMap().get("bank").get(0).getBodyAsString()+"AccountService";
 
 //        System.out.println(bank);
-        if(PopularAccountService.NAME.equals(bank))
-            accountService = getAccountService(PopularAccountService.NAME);
-        else if(BHDAccountService.NAME.equals(bank))
-            accountService = getAccountService(BHDAccountService.NAME);
-//        System.out.println(BHDAccountService.NAME);
+        accountService = getAccountService(bank);
+        System.out.println(accountService   );
 
         var  fileName=fileUploadService.uploadFile(file);
 
