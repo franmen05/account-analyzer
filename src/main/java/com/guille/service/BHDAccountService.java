@@ -15,9 +15,10 @@ import java.util.HashSet;
 import java.util.List;
 
 @ApplicationScoped
-public class PopularAccountService implements AccountService{
+public class BHDAccountService implements AccountService{
 
-    public static String NAME=PopularAccountService.class.getSimpleName();
+
+    public static String NAME=BHDAccountService.class.getSimpleName();
 
 //    @Inject
 //    Constants constants;

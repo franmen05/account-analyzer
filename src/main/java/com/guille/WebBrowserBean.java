@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 public class WebBrowserBean {
 
     WebBrowserBean() {
-        open();
+        //open();
     }
 
     public void open()  {
