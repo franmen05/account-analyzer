@@ -1,85 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <title>Account-analyzer</title>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
         <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.common.css" />
         <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.dark.css" />
         <script src="https://cdn3.devexpress.com/jslib/22.1.4/js/dx.all.js"></script>
         <link rel="stylesheet" type="text/css" href="index.css" />
-
-        <meta charset="UTF-8">
-        <title>Account-analyzer - 1.0.0-SNAPSHOT</title>
-        <script>
-            $(() => {
-
-                $('#file-uploader').dxFileUploader({
-                    selectButtonText: 'Select File',
-                    name: 'file',
-                    labelText: '',
-                    uploadMode: 'useForm',
-                    multiple: false,
-                    allowedFileExtensions: ['.csv'],
-                });
-
-                $('#button').dxButton({
-                    text: 'Analyze ',
-                    type: 'success',
-                    onClick() {
-                        // const confirm=DevExpress.ui.dialog.confirm('Is file correct?.')
-                        // confirm.done((dialogResult)=> dialogResult?$("#form").submit():'');
-                        $("#form").submit();
-                    },
-                });
-
-                const frm = $('#form');
-                frm.submit(function (e) {
-                    e.preventDefault();
-
-                    $.ajax({
-                        type: frm.attr('method'),
-                        url: frm.attr('action'),
-                        data:  new FormData($(frm)[0]),
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        success:  (data) => {
-                            console.info('Submission was successful.');
-                            console.debug(data);
-
-                            addTransactionsDetail($('#commissions'),$('#commissionsTrans'),data.commissions);
-                            addTransactionsDetail($('#interest'),$('#interestTrans'),data.interest);
-                            addTransactionsDetail($('#taxes'),$('#taxesTrans'),data.taxes);
-                            addTransactionsDetail($('#nonPaymentFee'),$('#nonPaymentFeeTrans'),data.nonPaymentFee);
+        <script src="index.js"></script>
 
 
-
-                            $('#total').text(data.total)
-                        },
-                        error: (data) => {
-                            console.debug('An error occurred.');
-                            console.error(data);
-                    },
-                    });
-                });
-            });
-
-            const addTransactionsDetail= (parentContainer,idContainer, data)=> {
-                idContainer.empty();
-                if (data.total != 0) {
-
-                    parentContainer.show()
-                    data.transactionsDesc.forEach((desc) => idContainer.append(`<li>${desc}</li> `))
-                    idContainer.append(`<br> `)
-                    idContainer.append(`<span class="text-bold"> Total : $ ${data.total}</span>`)
-
-                }else{
-                    parentContainer.hide()
-
-                }
-            }
-
-        </script>
     </head>
     <body>
         <div class="header-wrapper">
@@ -188,7 +121,6 @@
                     <p> <b>Total :</b> <span id="total"></span></p>
                 </div>
             </div>
-
         </div>
     </body>
 </html>

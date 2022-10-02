@@ -62,7 +62,7 @@
     <dependency>
       <groupId>com.opencsv</groupId>
       <artifactId>opencsv</artifactId>
-      <version>5.6</version>
+      <version>5.7.0</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -141,7 +141,7 @@
         </property>
       </activation>
       <properties>
-        <skipITs>false</skipITs>
+        <skipITs>true</skipITs>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
     </profile>
