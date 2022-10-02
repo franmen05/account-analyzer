@@ -26,15 +26,12 @@ import java.util.logging.Handler;
 @Path("/account")
 public class AccountResource {
 
-
     public static final String SUFFIX = "_ClientProxy";
     @Inject
     FileUploadService fileUploadService;
 
     @Inject
     Instance<AccountService> handlers;
-
-    private AccountService accountService;
 
     //    @GET
 //    @Produces(MediaType.TEXT_PLAIN)
@@ -55,11 +52,9 @@ public class AccountResource {
     public Summary analyze(@MultipartForm MultipartFormDataInput file) throws CsvValidationException, IOException {
 
         var bank = file.getFormDataMap().get("bank").get(0).getBodyAsString()+"AccountService";
-
 //        System.out.println(bank);
-        accountService = getAccountService(bank);
+        var accountService = getAccountService(bank);
 //        System.out.println(accountService   );
-
         var  fileName=fileUploadService.uploadFile(file);
 
         System.out.println(fileName);
