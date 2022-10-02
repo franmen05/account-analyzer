@@ -63,6 +63,7 @@ public class AccountResource {
 //        var transactions= accountService.readPopularCSV("pdcsvexport(1).csv");
 //        var transactions= accountService.readPopularCSV("pdcsvexport(2).csv");
         var transactions= accountService.readCSV(fileName);
+        //TODO  Agregar metodo par eliminar  archivo una vez leido.
 
         var interest =  accountService.getTransactionSummary(transactions, TransactionType.INTEREST);
         var taxes = accountService.getTransactionSummary(transactions,TransactionType.TAXES);
