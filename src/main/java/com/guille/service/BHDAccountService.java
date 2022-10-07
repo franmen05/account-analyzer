@@ -28,12 +28,13 @@ public class BHDAccountService implements AccountService{
 //        var reader = new CSVReader(new FileReader(constants.uploadDir()+"/"+fileName));
         var reader = new CSVReader(new FileReader(filePath));
         var transactions = new ArrayList<Transaction>();
-        for(int i=0;i<11;i++)
-            reader.readNext();
+//        for(int i=0;i<11;i++)
+        reader.readNext();
 
         // read line by line
         String[] record;
         while ((record = reader.readNext()) != null) {
+            System.out.println(record[3].isBlank());
             System.out.print(record.length+" :: ");
             System.out.println(Arrays.toString(record));
             if(record.length<=1 )
@@ -45,11 +46,11 @@ public class BHDAccountService implements AccountService{
             try{
 
                 var t = new Transaction(record[0],
-                    record[1],
-                    Float.parseFloat(record[2].isEmpty() ? "0":record[2]),
-                    Integer.parseInt(record[3].isEmpty() ? "0":record[3]),
-                    record[4],
-                    record[5]);
+                    "",
+                    Float.parseFloat(record[3].isBlank() ? "0":record[3].replace("RD$","").replace(",","")),
+                    Integer.parseInt(record[1].isBlank() ? "0":record[1].replace("RD$","").replace(",","")),
+                    "",
+                    record[2]);
 
                 transactions.add(t);
             }catch (ArrayIndexOutOfBoundsException ignored){}
@@ -71,12 +72,7 @@ public class BHDAccountService implements AccountService{
 
             total = transactions.stream()
                     .filter(
-                            account -> account.descContains("SOBREGIRO")
-                                    || account.descContains("CARGO POR SERVICIO")
-                                    || account.descContains("CARGO POR SERV")
-                                    || account.descContains("CARGO EMISION")
-                                    || account.descContains("PERDIDA")
-                                    || account.descContains("COMISIONES")
+                            account -> account.descContains("Com. ")
                     )
                     .map(t -> {
                         transactionDesList.add(t.desc());

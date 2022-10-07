@@ -45,8 +45,8 @@ public class PopularAccountService implements AccountService{
 
                 var t = new Transaction(record[0],
                     record[1],
-                    Float.parseFloat(record[2].isEmpty() ? "0":record[2]),
-                    Integer.parseInt(record[3].isEmpty() ? "0":record[3]),
+                    Float.parseFloat(record[2].isBlank() ? "0":record[2]),
+                    Integer.parseInt(record[3].isBlank() ? "0":record[3]),
                     record[4],
                     record[5]);
 
