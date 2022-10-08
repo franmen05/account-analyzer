@@ -33,19 +33,6 @@ public class AccountResource {
     @Inject
     Instance<AccountService> handlers;
 
-    //    @GET
-//    @Produces(MediaType.TEXT_PLAIN)
-//    public List<String> handle() {
-//        var   list = new ArrayList<String>();
-//        handlers.forEach(handler -> {
-//        System.out.println(PopularAccountService.class.getSimpleName()+"_ClientProxy");
-//        System.out.println(handler.getClass().getSimpleName());
-//
-//            list.add(handler.getClass().getSimpleName());
-//        });
-//
-//        return list;
-//    }
     @POST
     @Path("/analyze")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,12 +45,8 @@ public class AccountResource {
         var  fileName=fileUploadService.uploadFile(file);
 
         System.out.println(fileName);
-
-//        var transactions= accountService.readPopularCSV("pdcsvexport.csv");
-//        var transactions= accountService.readPopularCSV("pdcsvexport(1).csv");
-//        var transactions= accountService.readPopularCSV("pdcsvexport(2).csv");
         var transactions= accountService.readCSV(fileName);
-        //TODO  Agregar metodo par eliminar  archivo una vez leido.
+        fileUploadService.delete(fileName);
 
         var interest =  accountService.getTransactionSummary(transactions, TransactionType.INTEREST);
         var taxes = accountService.getTransactionSummary(transactions,TransactionType.TAXES);
@@ -73,8 +56,6 @@ public class AccountResource {
         System.out.println("MORA : " + nonPaymentFee);
         System.out.println("Impuestos : " + taxes);
         System.out.println("Comisiones : " + commissions);
-
-//        System.out.println(taxes);
 
         return  Summary.build(interest,taxes,nonPaymentFee,commissions);
     }

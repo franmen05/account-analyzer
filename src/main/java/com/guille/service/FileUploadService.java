@@ -42,14 +42,17 @@ public class FileUploadService {
         }
         return "Files Successfully Uploaded";
     }
+    public void delete(String fileName) throws IOException {
+        var path = Paths.get(fileName);
+        Files.deleteIfExists(path);
+    }
 
     private Path writeFile(InputStream inputStream, String fileName) throws IOException {
         byte[] bytes = IOUtils.toByteArray(inputStream);
         File customDir = new File(constants.uploadDir());
         fileName = customDir.getAbsolutePath() + File.separator + fileName;
-        Path path = Paths.get(fileName);
-        Files.deleteIfExists(path);
-        return Files.write(path, bytes, StandardOpenOption.CREATE_NEW);
+        delete(fileName);
+        return Files.write(Paths.get(fileName), bytes, StandardOpenOption.CREATE_NEW);
     }
 
     private String getFileName(MultivaluedMap<String, String> header) {
