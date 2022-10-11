@@ -11,10 +11,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.ArrayList;
 
 @ApplicationScoped
@@ -23,35 +20,53 @@ public class FileUploadService {
     @Inject
     Constants constants;
 
-    public String uploadFile(MultipartFormDataInput input) {
+
+    public Path uploadFile(MultipartFormDataInput input) {
         var uploadForm = input.getFormDataMap();
 //        var fileNames = new ArrayList<>();
         var inputParts = uploadForm.get("file");
         String fileName = null;
-        for (InputPart inputPart : inputParts) {
+
+
+        for (var inputPart : inputParts) {
             try {
-                var header = inputPart.getHeaders();
-                fileName = getFileName(header);
+
+                fileName = getFileName(inputPart.getHeaders());
+                var customDir = new File(constants.uploadDir());
+                fileName = customDir.getAbsolutePath() + File.separator + fileName;
 //                fileNames.add(fileName);
+//                var path = Paths.get(fileName);
+                System.out.println(fileName);
+//                delete(fileName);
+//                var file= new File(fileName);
+//                file.deleteOnExit();
+//                if (file.delete()) {
+//                    System.out.println("Deleted the file: " + file.getName());
+//                } else {
+//                    System.out.println("Failed to delete the file.");
+//                }
+
                 var inputStream = inputPart.getBody(InputStream.class, null);
-                return writeFile(inputStream,fileName).toString();
+                var filePath= writeFile(inputStream,fileName);
+//                filePath.toFile().deleteOnExit();
+                return filePath;
+
             } catch (Exception e) {
                 e.printStackTrace();
-                return "Can't save file";
+
+                return null;
             }
         }
-        return "Files Successfully Uploaded";
+        return null;
     }
-    public void delete(String fileName) throws IOException {
-        var path = Paths.get(fileName);
-        Files.deleteIfExists(path);
+    public void delete(Path filePath) throws IOException {
+
+        Files.deleteIfExists(filePath);
     }
 
     private Path writeFile(InputStream inputStream, String fileName) throws IOException {
         byte[] bytes = IOUtils.toByteArray(inputStream);
-        File customDir = new File(constants.uploadDir());
-        fileName = customDir.getAbsolutePath() + File.separator + fileName;
-        delete(fileName);
+
         return Files.write(Paths.get(fileName), bytes, StandardOpenOption.CREATE_NEW);
     }
 

@@ -9,6 +9,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,42 +23,50 @@ public class PopularAccountService implements AccountService{
 //    @Inject
 //    Constants constants;
 
-    public List<Transaction> readCSV(String filePath) throws IOException, CsvValidationException {
+    public List<Transaction> readFile(Path filePath) throws IOException {
 
+        try {
 //        var reader = new CSVReader(new FileReader(constants.uploadDir()+"/"+fileName));
-        var reader = new CSVReader(new FileReader(filePath));
-        var transactions = new ArrayList<Transaction>();
-        for(int i=0;i<11;i++)
-            reader.readNext();
+            var reader = new CSVReader(new FileReader(filePath.toFile()));
+            var transactions = new ArrayList<Transaction>();
+            for (int i = 0; i < 11; i++)
+                reader.readNext();
 
-        // read line by line
-        String[] record;
-        while ((record = reader.readNext()) != null) {
-            System.out.print(record.length+" :: ");
-            System.out.println(Arrays.toString(record));
-            if(record.length<=1 )
-                continue;
+            // read line by line
+            String[] record;
+            while ((record = reader.readNext()) != null) {
+                System.out.print(record.length + " :: ");
+                System.out.println(Arrays.toString(record));
+                if (record.length <= 1)
+                    continue;
 
-            if(record[0].trim().contains("Fecha")
-                    || record[0].trim().equals("") )
-                continue;
-            try{
+                if (record[0].trim().contains("Fecha")
+                        || record[0].trim().equals(""))
+                    continue;
+                try {
 
-                var t = new Transaction(record[0],
-                    record[1],
-                    Float.parseFloat(record[2].isBlank() ? "0":record[2]),
-                    Integer.parseInt(record[3].isBlank() ? "0":record[3]),
-                    record[4],
-                    record[5]);
+                    var t = new Transaction(record[0],
+                            record[1],
+                            Float.parseFloat(record[2].isBlank() ? "0" : record[2]),
+                            Integer.parseInt(record[3].isBlank() ? "0" : record[3]),
+                            record[4],
+                            record[5]);
 
-                transactions.add(t);
-            }catch (ArrayIndexOutOfBoundsException ignored){}
+                    transactions.add(t);
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
 
 //            System.out.println(t);
-        }
+            }
 
-        reader.close();
-        return transactions;
+
+            reader.close();
+            return transactions;
+        }catch (CsvValidationException e){
+            var ex=new IOException(e.getMessage());
+            ex.setStackTrace(e.getStackTrace());
+            throw ex;
+        }
     }
 
 
