@@ -25,9 +25,9 @@ public class PopularAccountService implements AccountService{
 
     public List<Transaction> readFile(Path filePath) throws IOException {
 
+        var reader = new CSVReader(new FileReader(filePath.toFile()));
         try {
 //        var reader = new CSVReader(new FileReader(constants.uploadDir()+"/"+fileName));
-            var reader = new CSVReader(new FileReader(filePath.toFile()));
             var transactions = new ArrayList<Transaction>();
             for (int i = 0; i < 11; i++)
                 reader.readNext();
@@ -63,6 +63,7 @@ public class PopularAccountService implements AccountService{
             reader.close();
             return transactions;
         }catch (CsvValidationException e){
+            reader.close();
             var ex=new IOException(e.getMessage());
             ex.setStackTrace(e.getStackTrace());
             throw ex;

@@ -57,8 +57,8 @@ public class AccountResource {
             return  Summary.build(interest,taxes,nonPaymentFee,commissions);
         }catch (Exception e){
             System.out.println("Exception : " );
-            fileUploadService.delete(filePath);
             e.printStackTrace();
+            fileUploadService.delete(filePath);
 //            Files.delete(fileName);
 
 //            throw e;
