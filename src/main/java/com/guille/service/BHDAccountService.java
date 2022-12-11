@@ -23,7 +23,7 @@ public class BHDAccountService implements AccountService{
 
     public List<Transaction> readFile(Path filePath) throws IOException {
 
-        System.out.println("=> XD :: " + filePath);
+        System.out.println("<=> XD <::> " + filePath);
         var fileInputStream = new FileInputStream(filePath.toFile());
         var transactions = new ArrayList<Transaction>();
 
