@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PopularPDFAccountService implements AccountService {
@@ -23,6 +24,8 @@ public class PopularPDFAccountService implements AccountService {
 //    @Inject
 //    Constants constants;
 
+
+    int count = 1;
     public List<Transaction> readFile(Path filePath) throws IOException {
         PDDocument document = null;
         try {
@@ -32,54 +35,76 @@ public class PopularPDFAccountService implements AccountService {
             pdfStripper.setEndPage(document.getNumberOfPages());
 
             String pages = pdfStripper.getText(document);
-//            System.out.println(pages);
             //split by detecting newline
             var lines = pages.split("\\r\\n|\\r|\\n");
+            var rows= Arrays.stream(lines).distinct().toArray();
+             //Just to indicate line number
+//            Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
+//            var rows=setLine.toArray();
 
-            int count = 1;   //Just to indicate line number
-            ;   //Just to indicate line number
+            count=1;
+            var transactions = new ArrayList<Transaction>();
+            var line = new StringBuilder();
 
-            String  line = "";
-            for (int countl = 9;countl<=lines.length;countl++) {
-                String temp=lines[countl];
-//                System.out.println(countl + " : " + temp);
+            for (int i = 9;i< rows.length-(3*4);i++) {
+                String temp=lines[i];
+                String[] record;
+//                System.out.println(i + " : " + temp);
+//                System.out.println(count);
+//                System.out.print(record.length + " :: ");
+//                System.out.println(Arrays.toString(record));
                 if(count==3){
                     count=0;
-                    line=line + temp;
-                    System.out.println(countl + " : " + line);
-                    line="";
-                }{
-                    line=line + temp;
+//                    line.append(" ");
+                    line.append(temp);
+//                    System.out.println(i + " : " + line);
+                    record= line.toString().split(" ");
+//                    System.out.println(Arrays.toString(record));
+//                    try {
+//
+//                        var t = new Transaction(record[1],
+//                                "",
+//                                Float.parseFloat(record[4].isBlank() ? "0" : record[2]),
+//                                Integer.parseInt(record[2].isBlank() ? "0" : record[3]),
+//                                record[4],
+//                                record[3]);
+//
+//                        transactions.add(t);
+//                    } catch (ArrayIndexOutOfBoundsException ignored) {}
+
+                    line = new StringBuilder();
+                }else if(count==1){
+                System.out.println(i + " : " + Arrays.stream(temp.split(" ",4)).toList());
+                System.out.println(count);
+                    line.append(" ");
+                    line.append(temp.replaceAll("\\s+","||"));
+                    line.append(" ");
+                }else if(count==2){
+                    line.append(" ");
+
+                    if(temp.isBlank())
+                        line.append("0");
+                    else
+                        line.append(temp.replaceAll("\\s+","||"));
+
+                    line.append(" ");
+                }else{
+                    line.append(temp);
                 }
                 count++;
             }
-/*
-            var transactions = new ArrayList<Transaction>();
-            Arrays.stream(lines).filter(s -> s.equalsIgnoreCase());
 
             // read line by line
-            String[] record;
+/*
             while ((record = reader.readNext()) != null) {
-                System.out.print(record.length + " :: ");
-                System.out.println(Arrays.toString(record));
+
                 if (record.length <= 1)
                     continue;
 
                 if (record[0].trim().contains("Fecha")
                         || record[0].trim().equals(""))
                     continue;
-                try {
 
-                    var t = new Transaction(record[0],
-                            record[1],
-                            Float.parseFloat(record[2].isBlank() ? "0" : record[2]),
-                            Integer.parseInt(record[3].isBlank() ? "0" : record[3]),
-                            record[4],
-                            record[5]);
-
-                    transactions.add(t);
-                } catch (ArrayIndexOutOfBoundsException ignored) {
-                }
 
 //            System.out.println(t);
             }
