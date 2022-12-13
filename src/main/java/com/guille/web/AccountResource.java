@@ -35,6 +35,7 @@ public class AccountResource {
     public Summary analyze(@MultipartForm MultipartFormDataInput file) throws  IOException {
 
         var bank = file.getFormDataMap().get("bank").get(0).getBodyAsString()+"AccountService";
+        var pass = file.getFormDataMap().get("pass").get(0).getBodyAsString();
 //        System.out.println(bank);
         var accountService = getAccountService(bank);
 //        System.out.println( accountService );
@@ -43,7 +44,7 @@ public class AccountResource {
         System.out.println(filePath);
         try {
 
-            var transactions= accountService.readFile(filePath);
+            var transactions= accountService.readFile(filePath,pass);
 
             var interest =  accountService.getTransactionSummary(transactions, TransactionType.INTEREST);
             var taxes = accountService.getTransactionSummary(transactions,TransactionType.TAXES);

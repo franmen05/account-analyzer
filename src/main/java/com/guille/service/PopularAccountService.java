@@ -23,7 +23,7 @@ public class PopularAccountService implements AccountService{
 //    @Inject
 //    Constants constants;
 
-    public List<Transaction> readFile(Path filePath) throws IOException {
+    public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
 
         var reader = new CSVReader(new FileReader(filePath.toFile()));
         try {

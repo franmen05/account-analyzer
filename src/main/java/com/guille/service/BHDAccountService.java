@@ -21,7 +21,7 @@ public class BHDAccountService implements AccountService{
 
     public static String NAME=BHDAccountService.class.getSimpleName();
 
-    public List<Transaction> readFile(Path filePath) throws IOException {
+    public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
 
         System.out.println("<=> XD <::> " + filePath);
         var fileInputStream = new FileInputStream(filePath.toFile());
