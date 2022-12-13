@@ -1,8 +1,9 @@
-package com.guille.service;
+package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
 import com.guille.domain.TransactionType;
+import com.guille.service.AccountService;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @ApplicationScoped
-public class BHDAccountService implements AccountService{
+public class BHDAccountService implements AccountService {
 
 
     public static String NAME=BHDAccountService.class.getSimpleName();
