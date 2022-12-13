@@ -16,16 +16,16 @@ public class WebBrowserBean {
         //open();
     }
 
-    public void open()  {
-        var url = "http://localhost:8080/index.html";
-        try {
-            if(Desktop.isDesktopSupported())
-                Desktop.getDesktop().browse(new URI(url));
-            else
-                Runtime.getRuntime().exec("xdg-open " + url);
-
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void open()  {
+//        var url = "http://localhost:8080/index.html";
+//        try {
+//            if(Desktop.isDesktopSupported())
+//                Desktop.getDesktop().browse(new URI(url));
+//            else
+//                Runtime.getRuntime().exec("xdg-open " + url);
+//
+//        } catch (IOException | URISyntaxException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

@@ -46,11 +46,10 @@ public class PopularPDFAccountService implements AccountService {
             var transactions = new ArrayList<Transaction>();
             var line = new StringBuilder();
 
+            List<String> record=new ArrayList<>();
             for (int i = 9;i< rows.length-(3*4);i++) {
                 String temp=lines[i];
-                String[] record;
-//                System.out.println(i + " : " + temp);
-//                System.out.println(count);
+
 //                System.out.print(record.length + " :: ");
 //                System.out.println(Arrays.toString(record));
                 if(count==3){
@@ -58,8 +57,8 @@ public class PopularPDFAccountService implements AccountService {
 //                    line.append(" ");
                     line.append(temp);
 //                    System.out.println(i + " : " + line);
-                    record= line.toString().split(" ");
-//                    System.out.println(Arrays.toString(record));
+                    record.addAll(Arrays.stream(line.toString().split(" ")).toList());
+                    System.out.println(record);
 //                    try {
 //
 //                        var t = new Transaction(record[1],
@@ -74,22 +73,23 @@ public class PopularPDFAccountService implements AccountService {
 
                     line = new StringBuilder();
                 }else if(count==1){
-                System.out.println(i + " : " + Arrays.stream(temp.split(" ",4)).toList());
-                System.out.println(count);
-                    line.append(" ");
+//                System.out.println(i + " : " + Arrays.stream(temp.split(" ",4)).toList());
+//                System.out.println(count);
                     line.append(temp.replaceAll("\\s+","||"));
-                    line.append(" ");
+                    record.addAll(Arrays.stream(temp.split(" ",4)).toList());
                 }else if(count==2){
-                    line.append(" ");
-
+//                    line.append(" ");
+                    System.out.println(i + " : " + temp);
+                    System.out.println(i + " : " + temp.replaceAll("\\s+","||")+" ");
+                    System.out.println(count);
                     if(temp.isBlank())
-                        line.append("0");
+                        record.add(" 0");
                     else
-                        line.append(temp.replaceAll("\\s+","||"));
+                        record.add(temp.replaceAll("\\s+","||"));
 
-                    line.append(" ");
+//                    line.append(" ");
                 }else{
-                    line.append(temp);
+                    record.add(temp);
                 }
                 count++;
             }
