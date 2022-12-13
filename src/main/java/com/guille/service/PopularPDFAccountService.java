@@ -28,6 +28,7 @@ public class PopularPDFAccountService implements AccountService {
     int count = 1;
     public List<Transaction> readFile(Path filePath) throws IOException {
         PDDocument document = null;
+        var transactions = new ArrayList<Transaction>();
         try {
             document = PDDocument.load(filePath.toFile(), "22300843194");
             var pdfStripper = new PDFTextStripper();
@@ -43,7 +44,7 @@ public class PopularPDFAccountService implements AccountService {
 //            var rows=setLine.toArray();
 
             count=1;
-            var transactions = new ArrayList<Transaction>();
+
             var line = new StringBuilder();
 
             List<String> record=new ArrayList<>();
@@ -55,37 +56,39 @@ public class PopularPDFAccountService implements AccountService {
                 if(count==3){
                     count=0;
 //                    line.append(" ");
-                    line.append(temp);
+//                    line.append(temp);
 //                    System.out.println(i + " : " + line);
-                    record.addAll(Arrays.stream(line.toString().split(" ")).toList());
+//                    record.addAll(Arrays.stream(temp.toString().split(" ")).toList());
+                    record.add(temp);
                     System.out.println(record);
-//                    try {
-//
-//                        var t = new Transaction(record[1],
-//                                "",
-//                                Float.parseFloat(record[4].isBlank() ? "0" : record[2]),
-//                                Integer.parseInt(record[2].isBlank() ? "0" : record[3]),
-//                                record[4],
-//                                record[3]);
-//
-//                        transactions.add(t);
-//                    } catch (ArrayIndexOutOfBoundsException ignored) {}
+                    try {
 
-                    line = new StringBuilder();
+                        var t = new Transaction(record.get(1),
+                                "",
+                                Float.parseFloat(record.get(5).isBlank() ? "0" : record.get(5).replace(",","")),
+                                Integer.parseInt(record.get(4).isBlank() ? "0" : record.get(4).replace(",","")),
+                                record.get(2),
+                                record.get(3));
+
+                        transactions.add(t);
+                    } catch (ArrayIndexOutOfBoundsException ignored) {}
+
+//                    line = new StringBuilder();
+                    record.clear();
                 }else if(count==1){
 //                System.out.println(i + " : " + Arrays.stream(temp.split(" ",4)).toList());
 //                System.out.println(count);
-                    line.append(temp.replaceAll("\\s+","||"));
+//                    line.append(temp.replaceAll("\\s+","||"));
                     record.addAll(Arrays.stream(temp.split(" ",4)).toList());
                 }else if(count==2){
 //                    line.append(" ");
-                    System.out.println(i + " : " + temp);
-                    System.out.println(i + " : " + temp.replaceAll("\\s+","||")+" ");
-                    System.out.println(count);
+//                    System.out.println(count);
+//                    System.out.println(i + " : " + temp);
+//                    System.out.println(i + " : " + temp.replaceAll("\\s+","||")+" ");
                     if(temp.isBlank())
-                        record.add(" 0");
+                        record.add("0");
                     else
-                        record.add(temp.replaceAll("\\s+","||"));
+                        record.add(temp.replaceAll("\\s+"," ").split(" ")[1]);
 
 //                    line.append(" ");
                 }else{
@@ -169,7 +172,9 @@ public class PopularPDFAccountService implements AccountService {
 //            ex.setStackTrace(e.getStackTrace());
 //            throw ex;
 //        }
-        return null;
+
+        transactions.forEach(System.out::println);
+        return transactions;
     }
 
 
