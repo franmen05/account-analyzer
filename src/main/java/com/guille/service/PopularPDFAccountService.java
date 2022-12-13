@@ -33,7 +33,7 @@ public class PopularPDFAccountService implements AccountService {
             var pages = pdfStripper.getText(document);
             var lines = pages.split("\\r\\n|\\r|\\n");
             var rows= Arrays.stream(lines).distinct().toArray();
-//            Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
+            Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
 
             count=1;
 
@@ -47,7 +47,7 @@ public class PopularPDFAccountService implements AccountService {
 
                     count=0;
                     record.add(temp);
-//                    System.out.println(record);
+                    System.out.println(record);
                     try {
 
                         var t = new Transaction(record.get(1),
@@ -58,7 +58,7 @@ public class PopularPDFAccountService implements AccountService {
                                 record.get(3));
 
                         transactions.add(t);
-                    } catch (ArrayIndexOutOfBoundsException ignored) {}
+                    } catch (Exception ignored) {}
 
                     record.clear();
                 }else if(count==1){
