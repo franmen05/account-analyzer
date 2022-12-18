@@ -16,11 +16,11 @@ import java.util.HashSet;
 import java.util.List;
 
 @ApplicationScoped
-public class PopularPDFAccountService implements AccountService {
+public class PopularPDFAccountService extends PopularAccountService {
 
     public static String NAME = PopularPDFAccountService.class.getSimpleName();
+    private int count = 1;
 
-    int count = 1;
     public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
         PDDocument document = null;
         var transactions = new ArrayList<Transaction>();
@@ -41,7 +41,7 @@ public class PopularPDFAccountService implements AccountService {
             List<String> record=new ArrayList<>();
             for (int i = 9;i< rows.length-(3*4);i++) {
 
-                String temp=lines[i];
+                var temp=lines[i];
                 if(count==3){
 
                     count=0;
@@ -90,63 +90,4 @@ public class PopularPDFAccountService implements AccountService {
         return transactions;
     }
 
-
-    public TransactionSummary getTransactionSummary(List<Transaction> transactions, TransactionType type) {
-
-        var transactionDesList= new HashSet<String>();
-        var total = 0f;
-
-        if(type==TransactionType.COMMISSIONS) {
-
-            total = transactions.stream()
-                    .filter(
-                            account -> account.descContains("SOBREGIRO")
-                                    || account.descContains("CARGO POR SERVICIO")
-                                    || account.descContains("CARGO POR SERV")
-                                    || account.descContains("CARGO EMISION")
-                                    || account.descContains("PERDIDA")
-                                    || account.descContains("COMISIONES")
-                    )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
-                    .reduce(0.0f, Float::sum);
-
-        }else if(type==TransactionType.TAXES) {
-            total = transactions.stream()
-                    .filter(
-                            account -> account.descContains("IMPUESTO")
-                    )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
-                    .reduce(0.0f, Float::sum);
-
-        }else if(type==TransactionType.INTEREST) {
-            total = transactions.stream()
-                    .filter(
-                            account -> account.descContains("Interes")
-                    )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
-                    .reduce(0.0f, Float::sum);
-
-        }else if(type==TransactionType.NON_PAYMENT_FEE) {
-            total = transactions.stream()
-                    .filter(
-                            account -> account.descContains("MORA")
-                    )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
-                    .reduce(0.0f, Float::sum);
-
-        }
-        return new TransactionSummary(transactionDesList,total);
-    }
 }
