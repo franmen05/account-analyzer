@@ -1,5 +1,8 @@
 package com.guille.domain;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public record Transaction(String date, String type, Float amount , Integer referenceNumber, String serial, String desc) {
 
 
@@ -12,6 +15,12 @@ public record Transaction(String date, String type, Float amount , Integer refer
     public Boolean descContains(String _desc) {
         return desc.toLowerCase().contains(_desc.toLowerCase());
     }
+    public Boolean descContains(Set<String> _desc) {
+        return _desc.stream().map(String::toLowerCase)
+                .anyMatch(s -> desc.toLowerCase().contains(s));
+    }
+
+
     @Override
     public String toString() {
         return "Account{" +

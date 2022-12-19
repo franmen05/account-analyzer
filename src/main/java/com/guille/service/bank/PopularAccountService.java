@@ -1,13 +1,16 @@
 package com.guille.service.bank;
 
+import com.guille.domain.Deduction;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
-import com.guille.domain.TransactionType;
+import com.guille.domain.DeductionType;
+import com.guille.reposiitory.DeductionRepository;
 import com.guille.service.AccountService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,13 +18,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PopularAccountService implements AccountService {
 
     public static String NAME=PopularAccountService.class.getSimpleName();
 
-//    @Inject
+    @Inject
+    DeductionRepository deductionRepository;
+
+    
+    //    @Inject
 //    Constants constants;
 
     public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
@@ -72,21 +80,27 @@ public class PopularAccountService implements AccountService {
     }
 
 
-    public TransactionSummary getTransactionSummary(List<Transaction> transactions, TransactionType type) {
+    public TransactionSummary getTransactionSummary(List<Transaction> transactions, DeductionType type) {
 
         var  transactionDesList= new HashSet<String>();
         var total = 0f;
 
-        if(type==TransactionType.COMMISSIONS) {
+        if(type== DeductionType.COMMISSIONS) {
 
             total = transactions.stream()
                     .filter(
                             account -> account.descContains("SOBREGIRO")
-                                    || account.descContains("CARGO POR SERVICIO")
-                                    || account.descContains("CARGO POR SERV")
+//                                    || account.descContains("CARGO POR SERVICIO")
+//                                    || account.descContains("CARGO POR SERV")
                                     || account.descContains("CARGO EMISION")
                                     || account.descContains("PERDIDA")
                                     || account.descContains("COMISIONES")
+                                    || account.descContains(deductionRepository
+                                        .find("type",DeductionType.COMMISSIONS)
+                                        .stream()
+                                        .map(Deduction::getDescription)
+                                        .collect(Collectors.toSet())
+                                    )
                     )
                     .map(t -> {
                         transactionDesList.add(t.desc());
@@ -94,7 +108,7 @@ public class PopularAccountService implements AccountService {
                     })
                     .reduce(0.0f, Float::sum);
 
-        }else if(type==TransactionType.TAXES) {
+        }else if(type== DeductionType.TAXES) {
             total = transactions.stream()
                     .filter(
                             account -> account.descContains("IMPUESTO")
@@ -105,7 +119,7 @@ public class PopularAccountService implements AccountService {
                     })
                     .reduce(0.0f, Float::sum);
 
-        }else if(type==TransactionType.INTEREST) {
+        }else if(type== DeductionType.INTEREST) {
             total = transactions.stream()
                     .filter(
                             account -> account.descContains("Interes")
@@ -116,7 +130,7 @@ public class PopularAccountService implements AccountService {
                     })
                     .reduce(0.0f, Float::sum);
 
-        }else if(type==TransactionType.NON_PAYMENT_FEE) {
+        }else if(type== DeductionType.NON_PAYMENT_FEE) {
             total = transactions.stream()
                     .filter(
                             account -> account.descContains("MORA")

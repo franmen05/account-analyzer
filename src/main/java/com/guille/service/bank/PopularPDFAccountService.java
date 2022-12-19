@@ -1,9 +1,7 @@
 package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
-import com.guille.domain.TransactionSummary;
-import com.guille.domain.TransactionType;
-import com.guille.service.AccountService;
+import com.guille.reposiitory.DeductionRepository;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -12,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 @ApplicationScoped
@@ -21,7 +18,8 @@ public class PopularPDFAccountService extends PopularAccountService {
     public static String NAME = PopularPDFAccountService.class.getSimpleName();
     private int count = 1;
 
-    public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
+
+    public List<Transaction> readFile(Path filePath, String... additionalParam) throws IOException {
         PDDocument document = null;
         var transactions = new ArrayList<Transaction>();
         try {

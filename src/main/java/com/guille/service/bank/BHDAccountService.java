@@ -2,7 +2,7 @@ package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
-import com.guille.domain.TransactionType;
+import com.guille.domain.DeductionType;
 import com.guille.service.AccountService;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -67,22 +67,22 @@ public class BHDAccountService implements AccountService {
         return val.isBlank()?"0":val;
     }
 
-    public TransactionSummary getTransactionSummary(List<Transaction> transactions, TransactionType type) {
+    public TransactionSummary getTransactionSummary(List<Transaction> transactions, DeductionType type) {
 
-        if(type==TransactionType.COMMISSIONS) {
+        if(type== DeductionType.COMMISSIONS) {
 
             return buildTransactionSummary(transactions.stream()
                     .filter(
                             account -> account.descContains("Com. ")
                     ));
 
-        }else if(type==TransactionType.TAXES) {
+        }else if(type== DeductionType.TAXES) {
             return buildTransactionSummary( transactions.stream()
                     .filter(
                             account -> account.descContains("Reten.ley")
                     ));
 
-        }else if(type==TransactionType.INTEREST) {
+        }else if(type== DeductionType.INTEREST) {
             return buildTransactionSummary(transactions.stream()
                     .filter(
                             account -> account.descContains("Interes")

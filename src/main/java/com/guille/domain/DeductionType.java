@@ -1,6 +1,6 @@
 package com.guille.domain;
 
-public enum TransactionType {
+public enum DeductionType {
     COMMISSIONS,
     TAXES,
     INTEREST,

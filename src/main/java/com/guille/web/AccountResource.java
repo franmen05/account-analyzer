@@ -1,10 +1,9 @@
 package com.guille.web;
 
 import com.guille.domain.Summary;
-import com.guille.domain.TransactionType;
+import com.guille.domain.DeductionType;
 import com.guille.service.AccountService;
 import com.guille.service.FileUploadService;
-import com.opencsv.exceptions.CsvValidationException;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -14,10 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
 
 @Path("/account")
 public class AccountResource {
@@ -46,10 +42,11 @@ public class AccountResource {
 
             var transactions= accountService.readFile(filePath,pass);
 
-            var interest =  accountService.getTransactionSummary(transactions, TransactionType.INTEREST);
-            var taxes = accountService.getTransactionSummary(transactions,TransactionType.TAXES);
-            var nonPaymentFee = accountService.getTransactionSummary(transactions,TransactionType.NON_PAYMENT_FEE);
-            var commissions = accountService.getTransactionSummary(transactions,TransactionType.COMMISSIONS);
+            var interest =  accountService.getTransactionSummary(transactions, DeductionType.INTEREST);
+            var taxes = accountService.getTransactionSummary(transactions, DeductionType.TAXES);
+            var nonPaymentFee = accountService.getTransactionSummary(transactions, DeductionType.NON_PAYMENT_FEE);
+            var commissions = accountService.getTransactionSummary(transactions, DeductionType.COMMISSIONS);
+
             System.out.println("Intereses por financiamiento : " + interest.total());
             System.out.println("MORA : " + nonPaymentFee);
             System.out.println("Impuestos : " + taxes);
