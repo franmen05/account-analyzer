@@ -89,18 +89,16 @@ public class PopularAccountService implements AccountService {
 
             total = transactions.stream()
                     .filter(
-                            account -> account.descContains("SOBREGIRO")
-//                                    || account.descContains("CARGO POR SERVICIO")
-//                                    || account.descContains("CARGO POR SERV")
-                                    || account.descContains("CARGO EMISION")
-                                    || account.descContains("PERDIDA")
-                                    || account.descContains("COMISIONES")
-                                    || account.descContains(deductionRepository
-                                        .find("type",DeductionType.COMMISSIONS)
-                                        .stream()
-                                        .map(Deduction::getDescription)
-                                        .collect(Collectors.toSet())
-                                    )
+                        account -> account.descContains("SOBREGIRO")
+//                            || account.descContains("CARGO POR SERVICIO")
+                            || account.descContains("CARGO POR SERV")
+                            || account.descContains("CARGO EMISION")
+                            || account.descContains("PERDIDA")
+                            || account.descContains("COMISIONES")
+                            || account.descContains(deductionRepository.find("type",DeductionType.COMMISSIONS)
+                                .stream().map(Deduction::getDescription)
+                                .collect(Collectors.toSet())
+                            )
                     )
                     .map(t -> {
                         transactionDesList.add(t.desc());

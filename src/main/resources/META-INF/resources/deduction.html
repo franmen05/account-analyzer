@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.dark.css" />
         <script src="https://cdn3.devexpress.com/jslib/22.1.4/js/dx.all.js"></script>
         <link rel="stylesheet" type="text/css" href="index.css" />
-        <script src="index.js"></script>
+<!--        <script src="index.js"></script>-->
 
 
     </head>
@@ -62,68 +62,32 @@
                 </div>
             </div>
         </div>
-        <div class="banner-wrapper">
-            <div class="grid">
-                <div class="banner">
-                    <div class="grid">
-                        <div class="callout">Account Analyzer!</div>
-                        <div class="app-details">
-                            <h5>Application Info</h5>
-                            <ul>
-                                <li>GroupId: <code>com.guille</code></li>
-                                <li>ArtifactId: <code>account-analyzer</code></li>
-                                <li>Version: <code>0.3</code></li>
-                                <li>Quarkus Version: <code>2.10.3.Final</code></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div class="content-wrapper">
 
             <div class="grid">
                 <div class="left-column">
 
-                    <form id="form" method="POST" action="account/analyze" enctype="multipart/form-data">
-                        <p>Choose file to upload : </p>
-                        <div id="file-uploader-container">
-                            <div id="file-uploader"> </div>
-                        </div>
+                    <form id="form" method="POST" action="deduction" enctype="multipart/form-data" >
+                        <p>Crear Deducción : </p>
                         <div>
-                            <label for="bank" >Seleccione Banco :</label>
-                            <select name="bank" id="bank">
+                            <label for="type" >Seleccione Tipo de Deducción :</label>
+                            <select name="type" id="type">
 <!--                                <option value="-1">Seleccione: </option>-->
-                                <option value="PopularPDF">Popular PDF</option>
-                                <option value="Popular">Popular</option>
-                                <option value="BHD">BHD (Alpha)</option>
+                                <option value="COMMISSIONS">Comisiones</option>
+                                <option value="TAXES">Impuestos</option>
+                                <option value="INTEREST">Intereses</option>
+                                <option value="NON_PAYMENT_FEE">Recargos( mora ) </option>
                             </select>
                         </div>
                         <div>
-                            <label for="pass" >Password :</label>
-                            <input type="password" name="pass" id="pass" value="22300843194">
+                            <label for="description" >Deducción :</label>
+                            <input type="text" name="description" id="description" value="">
                         </div>
-                        <div id="button"></div>
+                        <button id="button"> enviar</button>
+
                     </form>
 
-                    <h3>Result of Analysis : </h3>
-
-                    <ul class="provided-code">
-                        <li id="commissions" class="text-category">Commissions :
-                            <ul id="commissionsTrans" class="provided-code"></ul>
-                        </li>
-                        <li id="interest" class="text-category" >Interest :
-                            <ul id="interestTrans" class="provided-code"></ul>
-                        </li>
-                        <li id="nonPaymentFee" class="text-category" >NonPaymentFee :
-                            <ul id="nonPaymentFeeTrans" class="provided-code"></ul>
-                        </li>
-                        <li id="taxes" class="text-category">Taxes :
-                            <ul id="taxesTrans" class="provided-code"></ul>
-                        </li>
-                    </ul>
-                    <br>
-                    <p> <b>Total :</b> <span id="total"></span></p>
                 </div>
             </div>
         </div>

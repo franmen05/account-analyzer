@@ -9,6 +9,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,11 +28,12 @@ public class AccountResource {
 
     @POST
     @Path("/analyze")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Summary analyze(@MultipartForm MultipartFormDataInput file) throws  IOException {
 
-        var bank = file.getFormDataMap().get("bank").get(0).getBodyAsString()+"AccountService";
-        var pass = file.getFormDataMap().get("pass").get(0).getBodyAsString();
+        var bank = getBodyAsString(file, "bank") +"AccountService";
+        var pass = getBodyAsString(file, "pass");
 //        System.out.println(bank);
         var accountService = getAccountService(bank);
 //        System.out.println( accountService );
@@ -51,8 +53,10 @@ public class AccountResource {
             System.out.println("MORA : " + nonPaymentFee);
             System.out.println("Impuestos : " + taxes);
             System.out.println("Comisiones : " + commissions);
+            
             fileUploadService.delete(filePath);
             return  Summary.build(interest,taxes,nonPaymentFee,commissions);
+
         }catch (Exception e){
             System.out.println("Exception : " );
             e.printStackTrace();
@@ -66,6 +70,10 @@ public class AccountResource {
 
 
 
+    }
+
+    private static String getBodyAsString(MultipartFormDataInput file, String field) throws IOException {
+        return file.getFormDataMap().get(field).get(0).getBodyAsString();
     }
 
     private AccountService getAccountService(String NAME) {

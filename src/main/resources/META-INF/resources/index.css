@@ -199,6 +199,11 @@ a:hover, a:active { color: #c00; }
     /*float: right;*/
 }
 
+#button2 {
+    margin-top: 16px;
+    /*float: right;*/
+}
+
 #file-uploader-container {
     border: 0.1px solid #d3d3d3;
 }
