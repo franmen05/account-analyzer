@@ -34,6 +34,9 @@ public class FileUploadService {
 
                 fileName = getFileName(inputPart.getHeaders());
                 var customDir = new File(constants.uploadDir());
+                if (customDir.mkdirs())
+                    System.out.println("Directory "+customDir+" Create");
+
                 fileName = customDir.getAbsolutePath() + File.separator + fileName;
                 System.out.println(fileName);
 

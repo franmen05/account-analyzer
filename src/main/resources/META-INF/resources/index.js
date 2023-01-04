@@ -6,7 +6,7 @@ $(() => {
         labelText: '',
         uploadMode: 'useForm',
         multiple: false,
-        allowedFileExtensions: ['.csv'],
+        allowedFileExtensions: ['.csv','.pdf','.PDF'],
     });
 
     $('#button').dxButton({

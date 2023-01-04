@@ -19,7 +19,7 @@ public class PopularPDFAccountService extends PopularAccountService {
     private int count = 1;
 
 
-    public List<Transaction> readFile(Path filePath, String... additionalParam) throws IOException {
+    public List<Transaction> readFile(Path filePath, String... additionalParam) {
         PDDocument document = null;
         var transactions = new ArrayList<Transaction>();
         try {
