@@ -3,10 +3,10 @@ package com.guille;
 import io.quarkus.runtime.Startup;
 
 import javax.inject.Singleton;
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+// import java.awt.*;
+// import java.io.IOException;
+// import java.net.URI;
+// import java.net.URISyntaxException;
 
 @Startup
 @Singleton

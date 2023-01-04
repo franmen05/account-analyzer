@@ -2,15 +2,10 @@ package com.guille.web;
 
 import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
-import com.guille.domain.Summary;
-import com.guille.service.AccountService;
 import com.guille.service.DeductionService;
-import com.guille.service.FileUploadService;
-import org.jboss.resteasy.annotations.Body;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
