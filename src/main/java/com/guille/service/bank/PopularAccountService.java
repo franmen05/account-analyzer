@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class PopularAccountService implements AccountService {
 
-    public static String NAME=PopularAccountService.class.getSimpleName();
+//    public static String NAME=PopularAccountService.class.getSimpleName();
 
     @Inject
     DeductionRepository deductionRepository;
@@ -95,10 +95,10 @@ public class PopularAccountService implements AccountService {
                             || account.descContains("CARGO EMISION")
                             || account.descContains("PERDIDA")
                             || account.descContains("COMISIONES")
-                            || account.descContains(deductionRepository.find("type",DeductionType.COMMISSIONS)
-                                .stream().map(Deduction::getDescription)
-                                .collect(Collectors.toSet())
-                            )
+                            || account.descContains("SEGURO DEUDOR")
+//                            || account.descContains(deductionRepository.find("type",DeductionType.COMMISSIONS)
+//                                .stream().map(Deduction::getDescription)
+//                                .collect(Collectors.toSet()))
                     )
                     .map(t -> {
                         transactionDesList.add(t.desc());

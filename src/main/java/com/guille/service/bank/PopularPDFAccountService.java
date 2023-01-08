@@ -1,7 +1,6 @@
 package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
-import com.guille.reposiitory.DeductionRepository;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @ApplicationScoped
 public class PopularPDFAccountService extends PopularAccountService {
 
-    public static String NAME = PopularPDFAccountService.class.getSimpleName();
+//    public static String NAME = PopularPDFAccountService.class.getSimpleName();
     private int count = 1;
 
 
@@ -34,7 +33,7 @@ public class PopularPDFAccountService extends PopularAccountService {
 
             count=1;
 
-            var line = new StringBuilder();
+//            var line = new StringBuilder();
 
             List<String> record=new ArrayList<>();
             for (int i = 9;i< rows.length-(3*4);i++) {
