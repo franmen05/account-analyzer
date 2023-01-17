@@ -62,7 +62,7 @@ public class BHDAccountService implements AccountService {
         return transactions;
     }
 
-    private static String getNumberFromString(Row row, int i) {
+    protected static String getNumberFromString(Row row, int i) {
         var val = row.getCell(i).toString();
         return val.isBlank()?"0":val;
     }
