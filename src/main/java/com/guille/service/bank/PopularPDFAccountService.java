@@ -29,9 +29,8 @@ public class PopularPDFAccountService extends PopularAccountService {
             var pages = pdfStripper.getText(document);
             var lines = pages.split("\\r\\n|\\r|\\n");
             var rows= Arrays.stream(lines).distinct().toArray();
-            Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
-
-            count=1;
+//            Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
+//            count=1;
 
 //            var line = new StringBuilder();
 

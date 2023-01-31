@@ -74,6 +74,8 @@ public class BHDAccountService implements AccountService {
             return buildTransactionSummary(transactions.stream()
                     .filter(
                             account -> account.descContains("Com. ")
+                            || account.descContains("PARCIAL ANUAL EMISION")
+                            || account.descContains("CARGO COBERTURA DE SEGURO")
                     ));
 
         }else if(type== DeductionType.TAXES) {
