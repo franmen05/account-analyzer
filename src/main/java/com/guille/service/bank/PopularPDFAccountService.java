@@ -63,8 +63,10 @@ public class PopularPDFAccountService extends PopularAccountService {
 
                     if(temp.isBlank())
                         record.add("0");
-                    else
-                        record.add(temp.replaceAll("\\s+"," ").split(" ")[1]);
+                    else {
+                        String[] split = temp.replaceAll("\\s+", " ").split(" ");
+                        record.add(split.length>1? split[1] :"");
+                    }
                 }else{
                     record.add(temp);
                 }
