@@ -10,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.dark.css" />
         <script src="https://cdn3.devexpress.com/jslib/22.1.4/js/dx.all.js"></script>
         <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <!--        <script src="index.js"></script>-->
 
 
@@ -63,16 +64,19 @@
             </div>
         </div>
 
-        <div class="content-wrapper">
+        <div class="container content-wrapper">
 
             <div class="grid">
                 <div class="left-column">
 
+                    <h2>Crear Deducción : </h2>
+                    <br/>
                     <form id="form" method="POST" action="deduction" enctype="multipart/form-data" >
-                        <p>Crear Deducción : </p>
-                        <div>
+
+                        <div   class="form-group" >
+
                             <label for="type" >Seleccione Tipo de Deducción :</label>
-                            <select name="type" id="type">
+                            <select name="type" id="type" class="form-control">
 <!--                                <option value="-1">Seleccione: </option>-->
                                 <option value="COMMISSIONS">Comisiones</option>
                                 <option value="TAXES">Impuestos</option>
@@ -80,11 +84,12 @@
                                 <option value="NON_PAYMENT_FEE">Recargos( mora ) </option>
                             </select>
                         </div>
-                        <div>
-                            <label for="description" >Deducción :</label>
-                            <input type="text" name="description" id="description" value="">
+                        <div  class="form-group" >
+                            <label for="description" >Descripción Deducción :</label>
+                            <input class="form-control" type="text" name="description" id="description" value="">
                         </div>
-                        <button id="button"> enviar</button>
+
+                        <button id="button" class="btn btn-primary"> Enviar</button>
 
                     </form>
 

@@ -1,7 +1,7 @@
 package com.guille.web;
 
-import com.guille.domain.Summary;
 import com.guille.domain.DeductionType;
+import com.guille.domain.Summary;
 import com.guille.service.AccountService;
 import com.guille.service.FileUploadService;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
@@ -30,21 +30,21 @@ public class AccountResource {
     @Path("/analyze")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Summary analyze(@MultipartForm MultipartFormDataInput file) throws  IOException {
+    public Summary analyze(@MultipartForm MultipartFormDataInput file) throws IOException {
 
-        var bank = getBodyAsString(file, "bank") +"AccountService";
+        var bank = getBodyAsString(file, "bank") + "AccountService";
         var pass = getBodyAsString(file, "pass");
 //        System.out.println(bank);
         var accountService = getAccountService(bank);
 //        System.out.println( accountService );
-        var  filePath=fileUploadService.uploadFile(file);
+        var filePath = fileUploadService.uploadFile(file);
 
         System.out.println(filePath);
         try {
 
-            var transactions= accountService.readFile(filePath,pass);
+            var transactions = accountService.readFile(filePath, pass);
 
-            var interest =  accountService.getTransactionSummary(transactions, DeductionType.INTEREST);
+            var interest = accountService.getTransactionSummary(transactions, DeductionType.INTEREST);
             var taxes = accountService.getTransactionSummary(transactions, DeductionType.TAXES);
             var nonPaymentFee = accountService.getTransactionSummary(transactions, DeductionType.NON_PAYMENT_FEE);
             var commissions = accountService.getTransactionSummary(transactions, DeductionType.COMMISSIONS);
@@ -53,12 +53,12 @@ public class AccountResource {
             System.out.println("MORA : " + nonPaymentFee);
             System.out.println("Impuestos : " + taxes);
             System.out.println("Comisiones : " + commissions);
-            
-            fileUploadService.delete(filePath);
-            return  Summary.build(interest,taxes,nonPaymentFee,commissions);
 
-        }catch (Exception e){
-            System.out.println("Exception : " );
+            fileUploadService.delete(filePath);
+            return Summary.build(interest, taxes, nonPaymentFee, commissions);
+
+        } catch (Exception e) {
+            System.out.println("Exception : ");
             e.printStackTrace();
             fileUploadService.delete(filePath);
 //            Files.delete(fileName);
@@ -67,7 +67,6 @@ public class AccountResource {
             return null;
 
         }
-
 
 
     }

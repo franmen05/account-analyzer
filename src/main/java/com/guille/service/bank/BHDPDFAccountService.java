@@ -16,7 +16,7 @@ public class BHDPDFAccountService extends  BHDAccountService {
 
 
     public static String NAME= BHDPDFAccountService.class.getSimpleName();
-    private int count = 1;
+    private final int count = 1;
 
     public List<Transaction> readFile(Path filePath, String... additionalParam) {
         PDDocument document = null;
