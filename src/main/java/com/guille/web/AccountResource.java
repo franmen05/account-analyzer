@@ -9,10 +9,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
@@ -68,7 +65,6 @@ public class AccountResource {
 
         }
 
-
     }
 
     private static String getBodyAsString(MultipartFormDataInput file, String field) throws IOException {
@@ -82,4 +78,10 @@ public class AccountResource {
     }
 
 
+    @GET
+    @Path("/close")
+    public String close(){
+        System.exit(0);
+        return "Closed";
+    }
 }

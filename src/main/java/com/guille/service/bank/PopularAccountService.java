@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class PopularAccountService implements AccountService {
 
-//    public static String NAME=PopularAccountService.class.getSimpleName();
-
     @Inject
     DeductionRepository deductionRepository;
 

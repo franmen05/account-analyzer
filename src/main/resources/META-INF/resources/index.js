@@ -1,5 +1,8 @@
 $(() => {
 
+
+
+
     $('#file-uploader').dxFileUploader({
         selectButtonText: 'Select File',
         name: 'file',
@@ -47,6 +50,21 @@ $(() => {
             },
         });
     });
+
+
+    $('#bClose').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: 'GET',
+            url:'account/close',
+            success:  () => alert("Error al intentar cerrar servicio"),
+            error: (data) => {
+                alert("Account Analyzer fue cerrado correctamente")
+                $('#mainContainer').text("El servicio fue cerrado ")
+            },
+        });
+    });
 });
 
 const addTransactionsDetail= (parentContainer,idContainer, data)=> {
@@ -63,3 +81,4 @@ const addTransactionsDetail= (parentContainer,idContainer, data)=> {
 
     }
 }
+
