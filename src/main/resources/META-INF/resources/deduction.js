@@ -18,4 +18,24 @@ $(() => {
             },
         });
     });
+
+    const table = new DataTable('#dataTable-deductions', {
+        ajax: 'http://localhost:8082/deduction/list',
+        columns: [
+            { data: 'id' },
+            { data: 'type' },
+            { data: 'description' },
+            { data: null,
+                defaultContent: '<button>X</button>',
+                targets: -1
+            }
+        ]
+    });
+
+    table.on('click', 'button',  (e) =>{
+
+        let data = table.row(e.target.closest('tr')).data();
+        alert(data[0] + "'s salary is: " + data[2]);
+    });
+
 });

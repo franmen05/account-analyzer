@@ -5,12 +5,15 @@
         <title>Account-analyzer</title>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
-        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.common.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.dark.css" />
-        <script src="https://cdn3.devexpress.com/jslib/22.1.4/js/dx.all.js"></script>
+<!--        <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>-->
+<!--        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.common.css" />-->
+<!--        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.dark.css" />-->
+<!--        <script src="https://cdn3.devexpress.com/jslib/22.1.4/js/dx.all.js"></script>-->
         <link rel="stylesheet" type="text/css" href="index.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
         <script src="deduction.js"></script>
 
 
@@ -21,7 +24,8 @@
                 <div class="header">
                     <svg id="quarkus-logo-svg" data-name="Quarkus Logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 195">
                         <defs>
-                            <style>.cls-1 {
+                            <style>
+                            .cls-1 {
                                 fill: #fff;
                             }
 
@@ -31,7 +35,8 @@
 
                             .cls-3 {
                                 fill: #ff004a;
-                            }</style>
+                            }
+                            </style>
                         </defs>
                         <title>quarkus_logo_horizontal_rgb_1280px_reverse</title>
                         <path class="cls-1"
@@ -98,6 +103,20 @@
                     </form>
 
                 </div>
+            </div>
+            <br>
+            <div >
+                <table id="dataTable-deductions" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+
             </div>
         </div>
     </body>
