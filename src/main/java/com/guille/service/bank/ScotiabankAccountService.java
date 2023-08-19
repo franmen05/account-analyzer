@@ -31,8 +31,6 @@ public class ScotiabankAccountService implements AccountService {
     DeductionRepository deductionRepository;
 
 
-
-
     public List<Transaction> readFile(Path filePath, String... additionalParam) {
 
         PDDocument document = null;
