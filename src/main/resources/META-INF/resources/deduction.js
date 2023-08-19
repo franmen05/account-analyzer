@@ -1,4 +1,4 @@
-function getDataTable() {
+const buildDataTable = ()=> {
     return new DataTable('#dataTable-deductions', {
         ajax: 'deduction/list',
         columns: [
@@ -7,7 +7,7 @@ function getDataTable() {
             {data: 'description'},
             {
                 data: null,
-                defaultContent: '<button>X</button>',
+                defaultContent: '<button class=" btn btn-danger">X</button>',
                 targets: -1
             }
         ]
@@ -38,8 +38,7 @@ $(() => {
         });
     });
 
-    let table = getDataTable();
-
+    let table = buildDataTable();
     table.on('click', 'button',  (e) =>{
 
         let data = table.row(e.target.closest('tr')).data();
@@ -55,7 +54,5 @@ $(() => {
             });
         }
     });
-
-
 
 });

@@ -1,8 +1,5 @@
 $(() => {
 
-
-
-
     $('#file-uploader').dxFileUploader({
         selectButtonText: 'Select File',
         name: 'file',
@@ -51,7 +48,6 @@ $(() => {
         });
     });
 
-
     $('#bClose').click(function (e) {
         e.preventDefault();
 
@@ -81,4 +77,3 @@ const addTransactionsDetail= (parentContainer,idContainer, data)=> {
 
     }
 }
-
