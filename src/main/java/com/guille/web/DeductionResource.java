@@ -7,10 +7,7 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -32,6 +29,15 @@ public class DeductionResource {
         deductionService.create(d);
         return Response.ok(d).build();
 
+    }
+
+    @GET
+    @Path("/list")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response list( ) throws  IOException {
+
+        return Response.ok(deductionService.listAll()).build();
     }
 
     private static String getBodyAsString(MultipartFormDataInput file, String field) throws IOException {

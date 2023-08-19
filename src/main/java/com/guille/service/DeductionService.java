@@ -5,6 +5,7 @@ import com.guille.reposiitory.DeductionRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @ApplicationScoped
 public class DeductionService {
@@ -18,5 +19,9 @@ public class DeductionService {
     @Transactional
     public void create(Deduction deduction){
         deductionRepository.persist(deduction);
+    }
+
+    public List<Deduction> listAll(){
+        return deductionRepository.listAll();
     }
 }
