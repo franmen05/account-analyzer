@@ -24,4 +24,8 @@ public class DeductionService {
     public List<Deduction> listAll(){
         return deductionRepository.listAll();
     }
+    @Transactional
+    public Boolean delete(Long id){
+        return deductionRepository.deleteById(id);
+    }
 }

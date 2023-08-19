@@ -47,4 +47,15 @@ public class DeductionResource {
         return Response.ok(new DeductionDTO(deductions)).build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete( @PathParam("id") Long id) throws  IOException {
+
+
+        return Response.ok( deductionService.delete(id)).build();
+    }
+
+
 }

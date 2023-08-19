@@ -1,3 +1,19 @@
+function getDataTable() {
+    return new DataTable('#dataTable-deductions', {
+        ajax: 'deduction/list',
+        columns: [
+            {data: 'id'},
+            {data: 'type'},
+            {data: 'description'},
+            {
+                data: null,
+                defaultContent: '<button>X</button>',
+                targets: -1
+            }
+        ]
+    });
+}
+
 $(() => {
 
     const frm = $('#form');
@@ -11,7 +27,10 @@ $(() => {
             processData: false,
             contentType: false,
             cache: false,
-            success:  (data) => alert("Deducción creada con exito!"),
+            success:  (data) => {
+                alert("Deducción creada con exito!");
+                location.reload();
+            },
             error: (data) => {
                 alert("Error al guardar  ")
                 console.error(data)
@@ -19,23 +38,24 @@ $(() => {
         });
     });
 
-    const table = new DataTable('#dataTable-deductions', {
-        ajax: 'http://localhost:8082/deduction/list',
-        columns: [
-            { data: 'id' },
-            { data: 'type' },
-            { data: 'description' },
-            { data: null,
-                defaultContent: '<button>X</button>',
-                targets: -1
-            }
-        ]
-    });
+    let table = getDataTable();
 
     table.on('click', 'button',  (e) =>{
 
         let data = table.row(e.target.closest('tr')).data();
-        alert(data[0] + "'s salary is: " + data[2]);
+        if(confirm(` Seguro que Desea Eliminar el ID ${data.id} ?` )){
+            $.ajax({
+                type: 'DELETE',
+                url:`deduction/${data.id}`,
+                success:  () => location.reload()  ,
+                error: (data) => {
+                    alert("No Se puedo eliminar el resgistro   ")
+                    console.error(data)
+                },
+            });
+        }
     });
+
+
 
 });
