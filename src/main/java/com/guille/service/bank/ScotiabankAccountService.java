@@ -1,8 +1,10 @@
 package com.guille.service.bank;
 
+import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
+import com.guille.reposiitory.DeductionRepository;
 import com.guille.service.AccountService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -10,6 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,12 +20,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApplicationScoped
 public class ScotiabankAccountService implements AccountService {
 
     private int count = 1;
+    @Inject
+    DeductionRepository deductionRepository;
+
+
 
 
     public List<Transaction> readFile(Path filePath, String... additionalParam) {
@@ -151,18 +159,27 @@ public class ScotiabankAccountService implements AccountService {
             return buildTransactionSummary(transactions.stream()
                     .filter(
                             account -> account.descContains("Com. ")
+                                    || account.descContains(deductionRepository.find("type",DeductionType.COMMISSIONS)
+                                        .stream().map(Deduction::getDescription)
+                                        .collect(Collectors.toSet()))
                     ));
 
         }else if(type== DeductionType.TAXES) {
             return buildTransactionSummary( transactions.stream()
                     .filter(
                             account -> account.descContains("Reten.ley")
+                                    || account.descContains(deductionRepository.find("type",DeductionType.TAXES)
+                                        .stream().map(Deduction::getDescription)
+                                        .collect(Collectors.toSet()))
                     ));
 
         }else if(type== DeductionType.INTEREST) {
             return buildTransactionSummary(transactions.stream()
                     .filter(
                             account -> account.descContains("Interes")
+                                    || account.descContains(deductionRepository.find("type",DeductionType.INTEREST)
+                                        .stream().map(Deduction::getDescription)
+                                        .collect(Collectors.toSet()))
                     ));
 
 //        }else if(type==TransactionType.NON_PAYMENT_FEE) {
@@ -170,9 +187,11 @@ public class ScotiabankAccountService implements AccountService {
             return buildTransactionSummary( transactions.stream()
                     .filter(
                             account -> account.descContains("MORA")
+                                    || account.descContains(deductionRepository.find("type",DeductionType.NON_PAYMENT_FEE)
+                                    .stream().map(Deduction::getDescription)
+                                    .collect(Collectors.toSet()))
                     ));
         }
-//        return new TransactionSummary("",0f);
     }
 
     private TransactionSummary buildTransactionSummary(Stream<Transaction> transactionStream) {

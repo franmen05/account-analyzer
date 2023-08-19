@@ -80,7 +80,7 @@ public class PopularAccountService implements AccountService {
 
     public TransactionSummary getTransactionSummary(List<Transaction> transactions, DeductionType type) {
 
-        var  transactionDesList= new HashSet<String>();
+        var transactionDesList= new HashSet<String>();
         var total = 0f;
 
         if(type== DeductionType.COMMISSIONS) {
@@ -99,46 +99,48 @@ public class PopularAccountService implements AccountService {
                                 .stream().map(Deduction::getDescription)
                                 .collect(Collectors.toSet()))
                     )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
+                    .map(transaction -> getAmount(transaction, transactionDesList))
                     .reduce(0.0f, Float::sum);
 
         }else if(type== DeductionType.TAXES) {
             total = transactions.stream()
                     .filter(
                             account -> account.descContains("IMPUESTO")
+                                    || account.descContains(deductionRepository.find("type",DeductionType.TAXES)
+                                    .stream().map(Deduction::getDescription)
+                                    .collect(Collectors.toSet()))
                     )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
+                    .map(transaction -> getAmount(transaction, transactionDesList))
                     .reduce(0.0f, Float::sum);
 
         }else if(type== DeductionType.INTEREST) {
             total = transactions.stream()
                     .filter(
                             account -> account.descContains("Interes")
+                                    || account.descContains(deductionRepository.find("type",DeductionType.INTEREST)
+                                    .stream().map(Deduction::getDescription)
+                                    .collect(Collectors.toSet()))
                     )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
+                    .map(transaction ->  getAmount(transaction, transactionDesList))
                     .reduce(0.0f, Float::sum);
 
         }else if(type== DeductionType.NON_PAYMENT_FEE) {
             total = transactions.stream()
                     .filter(
                             account -> account.descContains("MORA")
+                                    || account.descContains(deductionRepository.find("type",DeductionType.NON_PAYMENT_FEE)
+                                    .stream().map(Deduction::getDescription)
+                                    .collect(Collectors.toSet()))
                     )
-                    .map(t -> {
-                        transactionDesList.add(t.desc());
-                        return t.amount();
-                    })
+                    .map(transaction -> getAmount(transaction, transactionDesList))
                     .reduce(0.0f, Float::sum);
 
         }
         return new TransactionSummary(transactionDesList,total);
+    }
+
+    private static Float getAmount(Transaction t, HashSet<String> transactionDesList) {
+        transactionDesList.add(t.desc());
+        return t.amount();
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface AccountService {
 
+
      List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException;
     TransactionSummary getTransactionSummary(List<Transaction> transactions, DeductionType type);
 }

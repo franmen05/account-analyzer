@@ -14,9 +14,7 @@ import java.util.List;
 @ApplicationScoped
 public class PopularPDFAccountService extends PopularAccountService {
 
-//    public static String NAME = PopularPDFAccountService.class.getSimpleName();
     private int count = 1;
-
 
     public List<Transaction> readFile(Path filePath, String... additionalParam) {
         PDDocument document = null;
@@ -29,12 +27,8 @@ public class PopularPDFAccountService extends PopularAccountService {
             var pages = pdfStripper.getText(document);
             var lines = pages.split("\\r\\n|\\r|\\n");
             var rows= Arrays.stream(lines).distinct().toArray();
-//            Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
-//            count=1;
-
-//            var line = new StringBuilder();
-
             List<String> record=new ArrayList<>();
+
             for (int i = 9;i< rows.length-(3*4);i++) {
 
                 var temp=lines[i];
@@ -87,5 +81,4 @@ public class PopularPDFAccountService extends PopularAccountService {
         transactions.forEach(System.out::println);
         return transactions;
     }
-
 }
