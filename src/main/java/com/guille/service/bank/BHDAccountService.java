@@ -21,12 +21,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApplicationScoped
-public class BHDAccountService implements AccountService {
+public class BHDAccountService extends BaseBankService {
 
-    @Inject
-    DeductionRepository deductionRepository;
-
-    public static String NAME=BHDAccountService.class.getSimpleName();
 
     public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
 
@@ -105,8 +101,9 @@ public class BHDAccountService implements AccountService {
                                         .collect(Collectors.toSet()))
                     ));
 
-//        }else if(type==TransactionType.NON_PAYMENT_FEE) {
-        } {
+        }
+        else if(type==DeductionType.NON_PAYMENT_FEE) {
+//        } {
             return buildTransactionSummary( transactions.stream()
                     .filter(
                             account -> account.descContains("MORA")
@@ -114,23 +111,16 @@ public class BHDAccountService implements AccountService {
                                         .stream().map(Deduction::getDescription)
                                         .collect(Collectors.toSet()))
                     ));
+        }{
+//        else if(type==DeductionType.USER_INTEREST) {
+            return buildTransactionSummary( transactions.stream()
+                    .filter(
+                            account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST)
+                                    .stream().map(Deduction::getDescription)
+                                    .collect(Collectors.toSet()))
+                    ));
         }
 //        return new TransactionSummary("",0f);
-    }
-
-    private TransactionSummary buildTransactionSummary(Stream<Transaction> transactionStream) {
-
-        var  transactionSet= new HashSet<String>();
-        var total = 0f;
-
-        total = transactionStream.map(t -> {
-                    transactionSet.add(t.desc());
-                    return t.amount();
-                })
-                .reduce(0.0f, Float::sum);
-
-//        return total;
-        return new TransactionSummary(transactionSet,total);
     }
 
 }

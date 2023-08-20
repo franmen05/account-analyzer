@@ -24,12 +24,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApplicationScoped
-public class ScotiabankAccountService implements AccountService {
+public class ScotiabankAccountService extends BaseBankService {
 
     private int count = 1;
-    @Inject
-    DeductionRepository deductionRepository;
-
 
     public List<Transaction> readFile(Path filePath, String... additionalParam) {
 
@@ -180,31 +177,24 @@ public class ScotiabankAccountService implements AccountService {
                                         .collect(Collectors.toSet()))
                     ));
 
-//        }else if(type==TransactionType.NON_PAYMENT_FEE) {
-        } {
-            return buildTransactionSummary( transactions.stream()
+        }else if(type==DeductionType.NON_PAYMENT_FEE) {
+//        } {
+            return buildTransactionSummary(transactions.stream()
                     .filter(
                             account -> account.descContains("MORA")
-                                    || account.descContains(deductionRepository.find("type",DeductionType.NON_PAYMENT_FEE)
+                                    || account.descContains(deductionRepository.find("type", DeductionType.NON_PAYMENT_FEE)
+                                    .stream().map(Deduction::getDescription)
+                                    .collect(Collectors.toSet()))
+                    ));
+//        }else if(type==DeductionType.USER_INTEREST) {
+        }{
+            return buildTransactionSummary( transactions.stream()
+                    .filter(
+                            account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST)
                                     .stream().map(Deduction::getDescription)
                                     .collect(Collectors.toSet()))
                     ));
         }
-    }
-
-    private TransactionSummary buildTransactionSummary(Stream<Transaction> transactionStream) {
-
-        var  transactionSet= new HashSet<String>();
-        var total = 0f;
-
-        total = transactionStream.map(t -> {
-                    transactionSet.add(t.desc());
-                    return t.amount();
-                })
-                .reduce(0.0f, Float::sum);
-
-//        return total;
-        return new TransactionSummary(transactionSet,total);
     }
 
 }

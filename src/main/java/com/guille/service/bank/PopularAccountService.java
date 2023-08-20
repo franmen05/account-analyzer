@@ -21,14 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class PopularAccountService implements AccountService {
-
-    @Inject
-    DeductionRepository deductionRepository;
-
-    
-    //    @Inject
-//    Constants constants;
+public class PopularAccountService extends BaseBankService {
 
     public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
 
@@ -135,8 +128,15 @@ public class PopularAccountService implements AccountService {
                     .map(transaction -> getAmount(transaction, transactionDesList))
                     .reduce(0.0f, Float::sum);
 
+        }else if(type==DeductionType.USER_INTEREST) {
+            return buildTransactionSummary( transactions.stream()
+                    .filter(
+                            account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST)
+                                    .stream().map(Deduction::getDescription)
+                                    .collect(Collectors.toSet()))
+                    ));
         }
-        return new TransactionSummary(transactionDesList,total);
+            return new TransactionSummary(transactionDesList,total);
     }
 
     private static Float getAmount(Transaction t, HashSet<String> transactionDesList) {

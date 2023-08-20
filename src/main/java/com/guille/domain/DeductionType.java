@@ -4,5 +4,6 @@ public enum DeductionType {
     COMMISSIONS,
     TAXES,
     INTEREST,
-    NON_PAYMENT_FEE
+    NON_PAYMENT_FEE,
+    USER_INTEREST
 }
