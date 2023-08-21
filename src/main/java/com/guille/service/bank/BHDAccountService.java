@@ -4,21 +4,16 @@ import com.guille.domain.Deduction;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
 import com.guille.domain.DeductionType;
-import com.guille.reposiitory.DeductionRepository;
-import com.guille.service.AccountService;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 public class BHDAccountService extends BaseBankService {
@@ -111,15 +106,14 @@ public class BHDAccountService extends BaseBankService {
                                         .stream().map(Deduction::getDescription)
                                         .collect(Collectors.toSet()))
                     ));
-        }{
-//        else if(type==DeductionType.USER_INTEREST) {
-            return buildTransactionSummary( transactions.stream()
-                    .filter(
-                            account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST)
-                                    .stream().map(Deduction::getDescription)
-                                    .collect(Collectors.toSet()))
-                    ));
         }
+//        else if(type==DeductionType.USER_INTEREST_OUT_TOTAL) {
+////        } {
+//            return getTransactionSummary2(transactions, DeductionType.USER_INTEREST_OUT_TOTAL);
+//        }{
+//        else if(type==DeductionType.USER_INTEREST) {
+            return buildTransactionSummary(transactions, type);
+//        }
 //        return new TransactionSummary("",0f);
     }
 

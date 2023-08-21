@@ -4,13 +4,10 @@ import com.guille.domain.Deduction;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
 import com.guille.domain.DeductionType;
-import com.guille.reposiitory.DeductionRepository;
-import com.guille.service.AccountService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -127,16 +124,26 @@ public class PopularAccountService extends BaseBankService {
                     )
                     .map(transaction -> getAmount(transaction, transactionDesList))
                     .reduce(0.0f, Float::sum);
-
-        }else if(type==DeductionType.USER_INTEREST) {
-            return buildTransactionSummary( transactions.stream()
-                    .filter(
-                            account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST)
-                                    .stream().map(Deduction::getDescription)
-                                    .collect(Collectors.toSet()))
-                    ));
+//
+//        }else if(type==DeductionType.USER_INTEREST) {
+//            return buildTransactionSummary(transactions.stream()
+//                    .filter(
+//                            account -> account.descContains(deductionRepository.find("type", DeductionType.USER_INTEREST)
+//                                    .stream().map(Deduction::getDescription)
+//                                    .collect(Collectors.toSet()))
+//                    ));
+//        }else if(type==DeductionType.USER_INTEREST_OUT_TOTAL) {
+//            return buildTransactionSummary( transactions.stream()
+//                .filter(
+//                        account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST_OUT_TOTAL)
+//                                .stream().map(Deduction::getDescription)
+//                                .collect(Collectors.toSet()))
+//                ));
+//        }
+        }else{
+            return buildTransactionSummary(transactions, type);
         }
-            return new TransactionSummary(transactionDesList,total);
+        return new TransactionSummary(transactionDesList,total);
     }
 
     private static Float getAmount(Transaction t, HashSet<String> transactionDesList) {

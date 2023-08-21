@@ -39,6 +39,7 @@ $(() => {
                 addTransactionsDetail($('#taxes'),$('#taxesTrans'),data.taxes);
                 addTransactionsDetail($('#nonPaymentFee'),$('#nonPaymentFeeTrans'),data.nonPaymentFee);
                 addTransactionsDetail($('#userInterest'),$('#userInterestTrans'),data.userInterest);
+                addTransactionsDetail($('#userInterestOutTotal'),$('#userInterestOutTotalTrans'),data.userInterestOutTotal);
 
                 $('#total').text(data.total)
             },

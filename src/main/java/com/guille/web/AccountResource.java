@@ -46,15 +46,17 @@ public class AccountResource {
             var nonPaymentFee = accountService.getTransactionSummary(transactions, DeductionType.NON_PAYMENT_FEE);
             var commissions = accountService.getTransactionSummary(transactions, DeductionType.COMMISSIONS);
             var userInterests = accountService.getTransactionSummary(transactions, DeductionType.USER_INTEREST);
+            var userInterestsOutTotal = accountService.getTransactionSummary(transactions, DeductionType.USER_INTEREST_OUT_TOTAL);
 
             System.out.println("Intereses por financiamiento : " + interest.total());
             System.out.println("MORA : " + nonPaymentFee);
             System.out.println("Impuestos : " + taxes);
             System.out.println("Comisiones : " + commissions);
             System.out.println("userInterest : " + userInterests);
+            System.out.println("userInterestsOutTotal : " + userInterestsOutTotal);
 
             fileUploadService.delete(filePath);
-            return Summary.build(interest, taxes, nonPaymentFee, commissions,userInterests);
+            return Summary.build(interest, taxes, nonPaymentFee, commissions,userInterests,userInterestsOutTotal);
 
         } catch (Exception e) {
             System.out.println("Exception : ");

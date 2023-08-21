@@ -187,13 +187,8 @@ public class ScotiabankAccountService extends BaseBankService {
                                     .collect(Collectors.toSet()))
                     ));
 //        }else if(type==DeductionType.USER_INTEREST) {
-        }{
-            return buildTransactionSummary( transactions.stream()
-                    .filter(
-                            account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST)
-                                    .stream().map(Deduction::getDescription)
-                                    .collect(Collectors.toSet()))
-                    ));
+        }else{
+            return buildTransactionSummary(transactions, type);
         }
     }
 
