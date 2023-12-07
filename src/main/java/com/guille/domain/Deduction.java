@@ -1,6 +1,7 @@
 package com.guille.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 
 @Entity
 public class Deduction{

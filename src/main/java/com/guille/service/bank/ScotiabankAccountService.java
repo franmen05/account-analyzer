@@ -4,24 +4,17 @@ import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
-import com.guille.reposiitory.DeductionRepository;
-import com.guille.service.AccountService;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 public class ScotiabankAccountService extends BaseBankService {

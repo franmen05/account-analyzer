@@ -1,8 +1,8 @@
 package com.guille;
 
 import io.quarkus.runtime.Startup;
+import jakarta.inject.Singleton;
 
-import javax.inject.Singleton;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;

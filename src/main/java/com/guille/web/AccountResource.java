@@ -4,13 +4,13 @@ import com.guille.domain.DeductionType;
 import com.guille.domain.Summary;
 import com.guille.service.AccountService;
 import com.guille.service.FileUploadService;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
 @Path("/account")

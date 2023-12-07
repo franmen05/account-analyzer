@@ -2,9 +2,9 @@ package com.guille.service;
 
 import com.guille.domain.Deduction;
 import com.guille.reposiitory.DeductionRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped

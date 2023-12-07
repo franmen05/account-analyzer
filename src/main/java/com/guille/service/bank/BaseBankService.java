@@ -6,8 +6,8 @@ import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
 import com.guille.reposiitory.DeductionRepository;
 import com.guille.service.AccountService;
+import jakarta.inject.Inject;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,11 +33,13 @@ public abstract class BaseBankService implements AccountService {
     }
 
     protected TransactionSummary buildTransactionSummary(List<Transaction> transactions, DeductionType deductionType) {
+        final var dedution = deductionRepository.find("type", deductionType)
+                .stream().map(Deduction::getDescription)
+                .collect(Collectors.toSet());
+
         return buildTransactionSummary(transactions.stream()
                 .filter(
-                        account -> account.descContains(deductionRepository.find("type", deductionType)
-                                .stream().map(Deduction::getDescription)
-                                .collect(Collectors.toSet()))
+                        account -> account.descContains(dedution)
                 ));
     }
 

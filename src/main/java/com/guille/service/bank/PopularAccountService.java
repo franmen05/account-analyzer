@@ -1,13 +1,13 @@
 package com.guille.service.bank;
 
 import com.guille.domain.Deduction;
+import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
-import com.guille.domain.DeductionType;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import jakarta.enterprise.context.ApplicationScoped;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;

@@ -1,13 +1,13 @@
 package com.guille.service.bank;
 
 import com.guille.domain.Deduction;
+import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
-import com.guille.domain.DeductionType;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;

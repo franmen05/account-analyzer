@@ -1,10 +1,10 @@
 package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
