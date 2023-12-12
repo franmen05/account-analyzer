@@ -5,6 +5,7 @@ import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.Row;
@@ -27,7 +28,7 @@ public class ScotiabankAccountService extends BaseBankService {
         var transactions = new ArrayList<Transaction>();
 
         try {
-            document = PDDocument.load(filePath.toFile(), additionalParam[0]);
+            document = Loader.loadPDF(filePath.toFile(), additionalParam[0]);
             var pdfStripper = new PDFTextStripper();
             pdfStripper.setEndPage(document.getNumberOfPages());
 

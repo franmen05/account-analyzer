@@ -2,6 +2,7 @@ package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -22,7 +23,7 @@ public class BHDPDFAccountService extends  BHDAccountService {
         PDDocument document = null;
         var transactions = new ArrayList<Transaction>();
         try {
-            document = PDDocument.load(filePath.toFile(), additionalParam[0]);
+            document = Loader.loadPDF(filePath.toFile(), additionalParam[0]);
             var pdfStripper = new PDFTextStripper();
             pdfStripper.setEndPage(document.getNumberOfPages());
 

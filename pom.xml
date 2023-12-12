@@ -15,6 +15,7 @@
     <quarkus.platform.version>3.6.1</quarkus.platform.version>
     <skipITs>true</skipITs>
     <surefire-plugin.version>3.1.2</surefire-plugin.version>
+    <native.maven.plugin.version>0.9.28</native.maven.plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -81,7 +82,7 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.19.0</version>
+      <version>2.20.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -96,7 +97,7 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>2.0.27</version>
+      <version>3.0.1</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -167,17 +168,84 @@
     </plugins>
   </build>
   <profiles>
+<!--    <profile>-->
+<!--      <id>native</id>-->
+<!--      <activation>-->
+<!--        <property>-->
+<!--          <name>native</name>-->
+<!--        </property>-->
+<!--      </activation>-->
+<!--      <properties>-->
+<!--        <skipITs>true</skipITs>-->
+<!--        <quarkus.package.type>native</quarkus.package.type>-->
+<!--      </properties>-->
+<!--    </profile>-->
     <profile>
       <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <properties>
-        <skipITs>true</skipITs>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>${native.maven.plugin.version}</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+              <execution>
+                <id>test-native</id>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <phase>test</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <fallback>false</fallback>
+            </configuration>
+          </plugin>
+
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <id>java-agent</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>java</executable>
+                  <workingDirectory>${project.build.directory}</workingDirectory>
+                  <arguments>
+                    <argument>-classpath</argument>
+                    <classpath/>
+                    <argument>${mainClass}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>native</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>${project.build.directory}/${imageName}</executable>
+                  <workingDirectory>${project.build.directory}</workingDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
