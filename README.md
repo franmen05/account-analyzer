@@ -1,6 +1,7 @@
-# account-analyzer 
+# Account-analyzer 
 
 This project uses [Quarkus](https://quarkus.io/), the Supersonic Subatomic Java Framework.
+Is 
 
 ## Running the application in dev mode
 
@@ -12,6 +13,13 @@ You can run your application in dev mode that enables live coding using:
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
 ## Packaging and running the application
+
+- Install [java 17+](https://www.oracle.com/java/technologies/downloads/#jdk17-windows) 
+- Download  https://github.com/franmen05/account-analyzer/blob/master/distribution/account-analyzer-0.3.1.zip
+- Uncompresse and run startup
+
+---
+**_Other way tio run :_**  
 
 The application can be packaged using:
 ```shell script
@@ -33,5 +41,5 @@ If you want to build an _über-jar_, execute the following command:
 The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
 
  
-[![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) 
 
