@@ -27,17 +27,21 @@ public class PopularPDFAccountService extends PopularAccountService {
 
             var pages = pdfStripper.getText(document);
             var lines = pages.split("\\r\\n|\\r|\\n");
+            System.out.println(Arrays.toString(lines));
             var rows= Arrays.stream(lines).distinct().toArray();
+            System.out.println(Arrays.toString(rows));
+
             List<String> record=new ArrayList<>();
 
-            for (int i = 9;i< rows.length-(3*4);i++) {
+
+            for (int i = 9;i< lines.length-12;i++) {
 
                 var temp=lines[i];
                 if(count==3){
 
                     count=0;
                     record.add(temp);
-                    System.out.println(record);
+                    System.out.println(i+" || "+record);
                     try {
 
                         var t = new Transaction(record.get(1),
@@ -45,7 +49,8 @@ public class PopularPDFAccountService extends PopularAccountService {
                                 Float.parseFloat(record.get(5).isBlank() ? "0" : record.get(5).replace(",","")),
                                 Integer.parseInt(record.get(4).isBlank() ? "0" : record.get(4).replace(",","")),
                                 record.get(2),
-                                record.get(3));
+                                record.get(3)
+                        );
 
                         transactions.add(t);
                     } catch (Exception ignored) {}
