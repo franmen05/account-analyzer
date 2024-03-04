@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,15 +33,30 @@ public abstract class BaseBankService implements AccountService {
         return new TransactionSummary(transactionSet,total);
     }
 
+    protected TransactionSummary buildTransactionSummary(Stream<Transaction> transactionStream, DeductionType dt) {
+
+        var  transactionSet= new TreeSet<String>();
+        var total = 0f;
+
+        total = transactionStream.map(t -> {
+                    transactionSet.add(t.desc()+" ::  "+t.amount());
+                    return t.amount();
+                })
+                .reduce(0.0f, Float::sum);
+
+        return new TransactionSummary(transactionSet,total);
+    }
+
     protected TransactionSummary buildTransactionSummary(List<Transaction> transactions, DeductionType deductionType) {
         final var dedution = deductionRepository.find("type", deductionType)
                 .stream().map(Deduction::getDescription)
                 .collect(Collectors.toSet());
-
-        return buildTransactionSummary(transactions.stream()
-                .filter(
-                        account -> account.descContains(dedution)
-                ));
+        if (deductionType==DeductionType.USER_INTEREST_OUT_TOTAL)
+            return buildTransactionSummary(
+                    transactions.stream().filter(account -> account.descContains(dedution)),deductionType);
+        else
+            return buildTransactionSummary(
+                    transactions.stream().filter(account -> account.descContains(dedution)));
     }
 
 

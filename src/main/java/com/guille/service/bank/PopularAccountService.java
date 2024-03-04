@@ -11,10 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -119,8 +116,8 @@ public class PopularAccountService extends BaseBankService {
                     .filter(
                             account -> account.descContains("MORA")
                                     || account.descContains(deductionRepository.find("type",DeductionType.NON_PAYMENT_FEE)
-                                    .stream().map(Deduction::getDescription)
-                                    .collect(Collectors.toSet()))
+                                        .stream().map(Deduction::getDescription)
+                                        .collect(Collectors.toSet()))
                     )
                     .map(transaction -> getAmount(transaction, transactionDesList))
                     .reduce(0.0f, Float::sum);
@@ -146,7 +143,7 @@ public class PopularAccountService extends BaseBankService {
         return new TransactionSummary(transactionDesList,total);
     }
 
-    private static Float getAmount(Transaction t, HashSet<String> transactionDesList) {
+    private static Float getAmount(Transaction t, Set<String> transactionDesList) {
         transactionDesList.add(t.desc());
         return t.amount();
     }
