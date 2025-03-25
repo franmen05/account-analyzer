@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -37,45 +38,55 @@ public class ScotiabankAccountService extends BaseBankService {
             var rows= Arrays.stream(lines).distinct().toArray();
             Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
 
-            count=1;
-
-//            var line = new StringBuilder();
-
             List<String> record=new ArrayList<>();
-            for (int i = 9;i< rows.length-(3*4);i++) {
+            boolean usdt=false;
+            for (int i = 94;i< rows.length-20;i++) {
 
-                var temp=lines[i];
-                if(count==3){
+                var temp=rows[i].toString();
+                if(temp.isBlank())
+                    continue;
 
-                    count=0;
-                    record.add(temp);
+
+                if (temp.contains("USD"))
+                    usdt=true;
+
+                    List<String> list = Arrays.stream(temp.split(" ", 4)).toList();
+
+                    if(list.size()<4)
+                        continue;
+
+
+                    String amount = Arrays.stream(list.get(3).split("[^\\d.]+"))
+                        .filter(s -> !s.isBlank())
+                         .findFirst()
+                        .map(List::of)
+                        .orElseGet(() -> List.of("0"))
+                        .getFirst();
+
+                    amount = amount.substring(0,amount.length()-1);
+
+                    record.addAll(list);
+//                    if(extractDates(record.get(1)).isEmpty())
+//                        continue;
+
                     System.out.println(record);
                     try {
 
+                        String referenceNum = record.get(0).substring(0,record.get(0).length()-1);
                         var t = new Transaction(record.get(1),
                                 "",
-                                Float.parseFloat(record.get(5).isBlank() ? "0" : record.get(5).replace(",","")),
-                                Integer.parseInt(record.get(4).isBlank() ? "0" : record.get(4).replace(",","")),
-                                record.get(2),
-                                record.get(3));
+                                Float.parseFloat(amount.isBlank() ? "0" : amount.replace(",","")),
+                                Integer.parseInt(referenceNum.isBlank() ? "0" : referenceNum.replace(",","")),
+                                "",
+                                usdt?"USD "+record.get(3):record.get(3));
 
                         transactions.add(t);
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+//                        System.out.println(ignored.getMessage());
+                    }
 
                     record.clear();
-                }else if(count==1){
 
-                    record.addAll(Arrays.stream(temp.split(" ",4)).toList());
-                }else if(count==2){
-
-                    if(temp.isBlank())
-                        record.add("0");
-                    else
-                        record.add(temp.replaceAll("\\s+"," ").split(" ")[1]);
-                }else{
-                    record.add(temp);
-                }
-                count++;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,48 +105,15 @@ public class ScotiabankAccountService extends BaseBankService {
     }
 
 
-//    public static String NAME= ScotiabankAccountService.class.getSimpleName();
+    public static List<String> extractDates(String text) {
+        String regex = "\\b(\\d{4}-\\d{2}-\\d{2}|\\d{2}/\\d{2}/\\d{4}|\\d{2}-[A-Za-z]{3}-\\d{4})\\b";
 
-//    public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
-//
-//        System.out.println("<=> XD <::> " + filePath);
-//        var fileInputStream = new FileInputStream(filePath.toFile());
-//        var transactions = new ArrayList<Transaction>();
-//
-//        try {
-//            var workbook = WorkbookFactory.create(fileInputStream);
-//
-//            var sheet = workbook.getSheetAt(0);
-//
-//            for (Row row : sheet) {
-//
-//                System.out.print(row.getRowNum() + " :: ");
-//                System.out.println(row.getCell(3));
-//
-//                if (row.getCell(0).getStringCellValue().contains("Fecha")
-//                        || row.getCell(0).getStringCellValue().trim().equals(""))
-//                    continue;
-//
-//                var t = new Transaction(row.getCell(0).getStringCellValue(),
-//                        "",
-//                        Float.parseFloat(getNumberFromString(row, 3)),
-//                        Integer.parseInt(getNumberFromString(row, 1)),
-//                        "",
-//                        row.getCell(2).getStringCellValue());
-//
-//                transactions.add(t);
-//            }
-//            workbook.close();
-//            fileInputStream.close();
-//
-//        }catch (Exception e){
-//            fileInputStream.close();
-//            throw  e;
-//        }
-//
-//        return transactions;
-//    }
-
+        return Pattern.compile(regex)
+                .matcher(text)
+                .results()
+                .map(match -> match.group())
+                .collect(Collectors.toList());
+    }
     private static String getNumberFromString(Row row, int i) {
         var val = row.getCell(i).toString();
         return val.isBlank()?"0":val;
