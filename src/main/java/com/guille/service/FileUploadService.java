@@ -1,6 +1,7 @@
 package com.guille.service;
 
 import com.guille.config.Constants;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -36,18 +37,16 @@ public class FileUploadService {
                 fileName = getFileName(inputPart.getHeaders());
                 var customDir = new File(constants.uploadDir());
                 if (customDir.mkdirs())
-                    System.out.println("Directory "+customDir+" Create");
+                    Log.infof("Created upload directory %s", customDir);
 
                 fileName = customDir.getAbsolutePath() + File.separator + fileName;
-                System.out.println(fileName);
-
+                Log.debugf("Uploading file to %s", fileName);
 
                 var inputStream = inputPart.getBody(InputStream.class, null);
-                //                filePath.toFile().deleteOnExit();
                 return writeFile(inputStream,fileName);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.error("Failed to upload file", e);
 
                 return null;
             }

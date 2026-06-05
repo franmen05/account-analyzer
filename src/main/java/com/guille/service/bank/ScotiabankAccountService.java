@@ -4,6 +4,7 @@ import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -36,7 +37,7 @@ public class ScotiabankAccountService extends BaseBankService {
             var pages = pdfStripper.getText(document);
             var lines = pages.split("\\r\\n|\\r|\\n");
             var rows= Arrays.stream(lines).distinct().toArray();
-            Arrays.stream(rows).forEach(s -> System.out.println(count++ +" : "+s));
+            Arrays.stream(rows).forEach(s -> Log.debugf("%d : %s", count++, s));
 
             List<String> record=new ArrayList<>();
             boolean usdt=false;
@@ -69,7 +70,7 @@ public class ScotiabankAccountService extends BaseBankService {
 //                    if(extractDates(record.get(1)).isEmpty())
 //                        continue;
 
-                    System.out.println(record);
+                    Log.debugf("record=%s", record);
                     try {
 
                         String referenceNum = record.get(0).substring(0,record.get(0).length()-1);
@@ -89,18 +90,18 @@ public class ScotiabankAccountService extends BaseBankService {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error("Failed to read Scotiabank PDF", e);
         } finally {
             if (document != null) {
                 try {
                     document.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.warn("Could not close PDF document", e);
                 }
             }
         }
 
-        transactions.forEach(System.out::println);
+        transactions.forEach(t -> Log.debug(t));
         return transactions;
     }
 

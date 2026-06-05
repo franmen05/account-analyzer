@@ -1,6 +1,7 @@
 package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -84,7 +85,7 @@ public class BHDPDFAccountService extends  BHDAccountService {
                                 colunm.get(4));
 
                         transactions.add(t);
-                    } catch (Exception ignored) {ignored.printStackTrace();}
+                    } catch (Exception ignored) {Log.debug("Skipping unparseable BHD PDF row", ignored);}
 
                     colunm.clear();
 //                }else if(count==1){
@@ -102,18 +103,18 @@ public class BHDPDFAccountService extends  BHDAccountService {
 //                count++;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error("Failed to read BHD PDF", e);
         } finally {
             if (document != null) {
                 try {
                     document.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.warn("Could not close PDF document", e);
                 }
             }
         }
 
-        transactions.forEach(System.out::println);
+        transactions.forEach(t -> Log.debug(t));
         return transactions;
     }
 

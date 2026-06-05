@@ -1,7 +1,7 @@
 package com.guille.service;
 
 import com.guille.domain.Deduction;
-import com.guille.reposiitory.DeductionRepository;
+import com.guille.repository.DeductionRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 

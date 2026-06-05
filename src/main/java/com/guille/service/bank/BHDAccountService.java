@@ -4,6 +4,7 @@ import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -21,19 +22,17 @@ public class BHDAccountService extends BaseBankService {
 
     public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
 
-        System.out.println("<=> XD <::> " + filePath);
-        var fileInputStream = new FileInputStream(filePath.toFile());
+        Log.debugf("Reading BHD Excel statement: %s", filePath);
         var transactions = new ArrayList<Transaction>();
 
-        try {
-            var workbook = WorkbookFactory.create(fileInputStream);
+        try (var fileInputStream = new FileInputStream(filePath.toFile());
+             var workbook = WorkbookFactory.create(fileInputStream)) {
 
             var sheet = workbook.getSheetAt(0);
 
             for (Row row : sheet) {
 
-                System.out.print(row.getRowNum() + " :: ");
-                System.out.println(row.getCell(3));
+                Log.debugf("%d :: %s", row.getRowNum(), row.getCell(3));
 
                 if (row.getCell(0).getStringCellValue().contains("Fecha")
                         || row.getCell(0).getStringCellValue().trim().isEmpty())
@@ -48,12 +47,6 @@ public class BHDAccountService extends BaseBankService {
 
                 transactions.add(t);
             }
-            workbook.close();
-            fileInputStream.close();
-
-        }catch (Exception e){
-            fileInputStream.close();
-            throw  e;
         }
 
         return transactions;

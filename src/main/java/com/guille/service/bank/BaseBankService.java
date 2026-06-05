@@ -4,7 +4,7 @@ import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
-import com.guille.reposiitory.DeductionRepository;
+import com.guille.repository.DeductionRepository;
 import com.guille.service.AccountService;
 import jakarta.inject.Inject;
 

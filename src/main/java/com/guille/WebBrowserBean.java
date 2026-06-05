@@ -1,5 +1,6 @@
 package com.guille;
 
+import io.quarkus.logging.Log;
 import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 
@@ -28,7 +29,7 @@ public class WebBrowserBean {
 //                Runtime.getRuntime().exec("xdg-open " + url);
 
         } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+            Log.warnf("Could not open browser at %s: %s", url, e.getMessage());
         }
     }
 }

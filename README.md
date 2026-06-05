@@ -7,7 +7,7 @@ This project uses [Quarkus](https://quarkus.io/), the Supersonic Subatomic Java 
 
 ## Running the application
 
-- Install [java 17+](https://www.oracle.com/java/technologies/downloads/#jdk17-windows)
+- Install [java 21+](https://www.oracle.com/java/technologies/downloads/#jdk21-windows)
 - Download  https://github.com/franmen05/account-analyzer/blob/master/distribution/account-analyzer-0.3.1.zip
 - Uncompressed
 - Run startup

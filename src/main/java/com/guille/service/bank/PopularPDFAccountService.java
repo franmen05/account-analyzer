@@ -1,6 +1,7 @@
 package com.guille.service.bank;
 
 import com.guille.domain.Transaction;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -27,9 +28,9 @@ public class PopularPDFAccountService extends PopularAccountService {
 
             var pages = pdfStripper.getText(document);
             var lines = pages.split("\\r\\n|\\r|\\n");
-            System.out.println(Arrays.toString(lines));
+            Log.debugf("lines=%s", Arrays.toString(lines));
             var rows= Arrays.stream(lines).distinct().toArray();
-            System.out.println(Arrays.toString(rows));
+            Log.debugf("rows=%s", Arrays.toString(rows));
 
             List<String> record=new ArrayList<>();
 
@@ -41,7 +42,7 @@ public class PopularPDFAccountService extends PopularAccountService {
 
                     count=0;
                     record.add(temp);
-                    System.out.println(i+" || "+record);
+                    Log.debugf("%d || %s", i, record);
                     try {
 
                         var t = new Transaction(record.get(1),
@@ -73,18 +74,18 @@ public class PopularPDFAccountService extends PopularAccountService {
                 count++;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error("Failed to read Popular PDF", e);
         } finally {
             if (document != null) {
                 try {
                     document.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.warn("Could not close PDF document", e);
                 }
             }
         }
 
-        transactions.forEach(System.out::println);
+        transactions.forEach(t -> Log.debug(t));
         return transactions;
     }
 }

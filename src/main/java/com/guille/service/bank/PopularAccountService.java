@@ -6,6 +6,7 @@ import com.guille.domain.Transaction;
 import com.guille.domain.TransactionSummary;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.FileReader;
@@ -19,9 +20,7 @@ public class PopularAccountService extends BaseBankService {
 
     public List<Transaction> readFile(Path filePath,String... additionalParam) throws IOException {
 
-        var reader = new CSVReader(new FileReader(filePath.toFile()));
-        try {
-//        var reader = new CSVReader(new FileReader(constants.uploadDir()+"/"+fileName));
+        try (var reader = new CSVReader(new FileReader(filePath.toFile()))) {
             var transactions = new ArrayList<Transaction>();
             for (int i = 0; i < 11; i++)
                 reader.readNext();
@@ -29,8 +28,7 @@ public class PopularAccountService extends BaseBankService {
             // read line by line
             String[] record;
             while ((record = reader.readNext()) != null) {
-                System.out.print(record.length + " :: ");
-                System.out.println(Arrays.toString(record));
+                Log.debugf("%d :: %s", record.length, Arrays.toString(record));
                 if (record.length <= 1)
                     continue;
 
@@ -49,16 +47,11 @@ public class PopularAccountService extends BaseBankService {
                     transactions.add(t);
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
-
-//            System.out.println(t);
             }
 
-
-            reader.close();
             return transactions;
-        }catch (CsvValidationException e){
-            reader.close();
-            var ex=new IOException(e.getMessage());
+        } catch (CsvValidationException e) {
+            var ex = new IOException(e.getMessage());
             ex.setStackTrace(e.getStackTrace());
             throw ex;
         }
