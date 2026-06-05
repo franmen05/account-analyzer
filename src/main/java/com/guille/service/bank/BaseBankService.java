@@ -10,6 +10,8 @@ import jakarta.inject.Inject;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +20,34 @@ public abstract class BaseBankService implements AccountService {
 
     @Inject
     DeductionRepository deductionRepository;
+
+    /**
+     * Hard-coded, bank-specific keywords for each deduction type. A transaction
+     * counts toward a type when its description contains any of these keywords
+     * OR any description configured as a {@code Deduction} rule for that type.
+     * Banks override this; types absent from the map fall back to rule-only
+     * matching (see {@link #getTransactionSummary}).
+     */
+    protected Map<DeductionType, Set<String>> keywordsByType() {
+        return Map.of();
+    }
+
+    @Override
+    public TransactionSummary getTransactionSummary(List<Transaction> transactions, DeductionType type) {
+        var keywords = keywordsByType().get(type);
+        if (keywords != null)
+            return summarizeByKeywords(transactions, type, keywords);
+        return buildTransactionSummary(transactions, type);
+    }
+
+    /** Union the bank's hard-coded keywords with the configured rules, then summarize matches. */
+    private TransactionSummary summarizeByKeywords(List<Transaction> transactions, DeductionType type, Set<String> hardcoded) {
+        var keywords = new HashSet<>(hardcoded);
+        deductionRepository.find("type", type)
+                .stream().map(Deduction::getDescription)
+                .forEach(keywords::add);
+        return buildTransactionSummary(transactions.stream().filter(t -> t.descContains(keywords)));
+    }
 
     protected TransactionSummary buildTransactionSummary(Stream<Transaction> transactionStream) {
 

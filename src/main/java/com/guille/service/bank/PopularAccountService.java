@@ -1,9 +1,7 @@
 package com.guille.service.bank;
 
-import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
-import com.guille.domain.TransactionSummary;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import io.quarkus.logging.Log;
@@ -13,7 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PopularAccountService extends BaseBankService {
@@ -58,86 +55,14 @@ public class PopularAccountService extends BaseBankService {
     }
 
 
-    public TransactionSummary getTransactionSummary(List<Transaction> transactions, DeductionType type) {
-
-        var transactionDesList= new HashSet<String>();
-        var total = 0f;
-
-        if(type== DeductionType.COMMISSIONS) {
-
-            total = transactions.stream()
-                    .filter(
-                        account -> account.descContains("SOBREGIRO")
-//                            || account.descContains("CARGO POR SERVICIO")
-                            || account.descContains("CARGO POR SERV")
-                            || account.descContains("CARGO EMISION")
-                            || account.descContains("PERDIDA")
-                            || account.descContains("COMISIONES")
-                            || account.descContains("SEGURO DEUDOR")
-                            || account.descContains("COM. AVANCE")
-                            || account.descContains(deductionRepository.find("type",DeductionType.COMMISSIONS)
-                                .stream().map(Deduction::getDescription)
-                                .collect(Collectors.toSet()))
-                    )
-                    .map(transaction -> getAmount(transaction, transactionDesList))
-                    .reduce(0.0f, Float::sum);
-
-        }else if(type== DeductionType.TAXES) {
-            total = transactions.stream()
-                    .filter(
-                            account -> account.descContains("IMPUESTO")
-                                    || account.descContains(deductionRepository.find("type",DeductionType.TAXES)
-                                    .stream().map(Deduction::getDescription)
-                                    .collect(Collectors.toSet()))
-                    )
-                    .map(transaction -> getAmount(transaction, transactionDesList))
-                    .reduce(0.0f, Float::sum);
-
-        }else if(type== DeductionType.INTEREST) {
-            total = transactions.stream()
-                    .filter(
-                            account -> account.descContains("Interes")
-                                    || account.descContains(deductionRepository.find("type",DeductionType.INTEREST)
-                                    .stream().map(Deduction::getDescription)
-                                    .collect(Collectors.toSet()))
-                    )
-                    .map(transaction ->  getAmount(transaction, transactionDesList))
-                    .reduce(0.0f, Float::sum);
-
-        }else if(type== DeductionType.NON_PAYMENT_FEE) {
-            total = transactions.stream()
-                    .filter(
-                            account -> account.descContains("MORA")
-                                    || account.descContains(deductionRepository.find("type",DeductionType.NON_PAYMENT_FEE)
-                                        .stream().map(Deduction::getDescription)
-                                        .collect(Collectors.toSet()))
-                    )
-                    .map(transaction -> getAmount(transaction, transactionDesList))
-                    .reduce(0.0f, Float::sum);
-//
-//        }else if(type==DeductionType.USER_INTEREST) {
-//            return buildTransactionSummary(transactions.stream()
-//                    .filter(
-//                            account -> account.descContains(deductionRepository.find("type", DeductionType.USER_INTEREST)
-//                                    .stream().map(Deduction::getDescription)
-//                                    .collect(Collectors.toSet()))
-//                    ));
-//        }else if(type==DeductionType.USER_INTEREST_OUT_TOTAL) {
-//            return buildTransactionSummary( transactions.stream()
-//                .filter(
-//                        account ->  account.descContains(deductionRepository.find("type",DeductionType.USER_INTEREST_OUT_TOTAL)
-//                                .stream().map(Deduction::getDescription)
-//                                .collect(Collectors.toSet()))
-//                ));
-//        }
-        }else{
-            return buildTransactionSummary(transactions, type);
-        }
-        return new TransactionSummary(transactionDesList,total);
-    }
-
-    private static Float getAmount(Transaction t, Set<String> transactionDesList) {
-        transactionDesList.add(t.desc());
-        return t.amount();
+    @Override
+    protected Map<DeductionType, Set<String>> keywordsByType() {
+        return Map.of(
+                DeductionType.COMMISSIONS, Set.of(
+                        "SOBREGIRO", "CARGO POR SERV", "CARGO EMISION", "PERDIDA",
+                        "COMISIONES", "SEGURO DEUDOR", "COM. AVANCE"),
+                DeductionType.TAXES, Set.of("IMPUESTO"),
+                DeductionType.INTEREST, Set.of("Interes"),
+                DeductionType.NON_PAYMENT_FEE, Set.of("MORA"));
     }
 }

@@ -1,21 +1,20 @@
 package com.guille.service.bank;
 
-import com.guille.domain.Deduction;
 import com.guille.domain.DeductionType;
 import com.guille.domain.Transaction;
-import com.guille.domain.TransactionSummary;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.ss.usermodel.Row;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -115,54 +114,13 @@ public class ScotiabankAccountService extends BaseBankService {
                 .map(match -> match.group())
                 .collect(Collectors.toList());
     }
-    private static String getNumberFromString(Row row, int i) {
-        var val = row.getCell(i).toString();
-        return val.isBlank()?"0":val;
-    }
-
-    public TransactionSummary getTransactionSummary(List<Transaction> transactions, DeductionType type) {
-
-        if(type== DeductionType.COMMISSIONS) {
-
-            return buildTransactionSummary(transactions.stream()
-                    .filter(
-                            account -> account.descContains("Com. ")
-                                    || account.descContains(deductionRepository.find("type",DeductionType.COMMISSIONS)
-                                        .stream().map(Deduction::getDescription)
-                                        .collect(Collectors.toSet()))
-                    ));
-
-        }else if(type== DeductionType.TAXES) {
-            return buildTransactionSummary( transactions.stream()
-                    .filter(
-                            account -> account.descContains("Reten.ley")
-                                    || account.descContains(deductionRepository.find("type",DeductionType.TAXES)
-                                        .stream().map(Deduction::getDescription)
-                                        .collect(Collectors.toSet()))
-                    ));
-
-        }else if(type== DeductionType.INTEREST) {
-            return buildTransactionSummary(transactions.stream()
-                    .filter(
-                            account -> account.descContains("Interes")
-                                    || account.descContains(deductionRepository.find("type",DeductionType.INTEREST)
-                                        .stream().map(Deduction::getDescription)
-                                        .collect(Collectors.toSet()))
-                    ));
-
-        }else if(type==DeductionType.NON_PAYMENT_FEE) {
-//        } {
-            return buildTransactionSummary(transactions.stream()
-                    .filter(
-                            account -> account.descContains("MORA")
-                                    || account.descContains(deductionRepository.find("type", DeductionType.NON_PAYMENT_FEE)
-                                    .stream().map(Deduction::getDescription)
-                                    .collect(Collectors.toSet()))
-                    ));
-//        }else if(type==DeductionType.USER_INTEREST) {
-        }else{
-            return buildTransactionSummary(transactions, type);
-        }
+    @Override
+    protected Map<DeductionType, Set<String>> keywordsByType() {
+        return Map.of(
+                DeductionType.COMMISSIONS, Set.of("Com. "),
+                DeductionType.TAXES, Set.of("Reten.ley"),
+                DeductionType.INTEREST, Set.of("Interes"),
+                DeductionType.NON_PAYMENT_FEE, Set.of("MORA"));
     }
 
 }
