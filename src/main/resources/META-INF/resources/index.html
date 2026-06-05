@@ -1,123 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Account-analyzer</title>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Account Analyzer</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8b339'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%231a1205'%3EA%3C/text%3E%3C/svg%3E">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
-        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.common.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.1.4/css/dx.dark.css" />
-        <script src="https://cdn3.devexpress.com/jslib/22.1.4/js/dx.all.js"></script>
-        <link rel="stylesheet" type="text/css" href="index.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-
-    </head>
-    <body >
-        <div class="header-wrapper">
-            <div class="grid">
-                <div class="p-2">
-                </div>
-            </div>
+    <link rel="stylesheet" href="app.css?v=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <header class="appbar">
+        <div class="brand">
+            <div class="brand__mark">A</div>
+            <div class="brand__name">Account <span>Analyzer</span></div>
         </div>
-        <div class="banner-wrapper">
-            <div class="grid">
-                <div class=" container banner">
-                    <div class="grid">
-                        <div class="callout">Account Analyzer!</div>
-<!--                        <div class="app-details">-->
-<!--                            <h5>Application Info</h5>-->
-<!--                            <ul>-->
-<!--                                <li>GroupId: <code>com.guille</code></li>-->
-<!--                                <li>ArtifactId: <code>account-analyzer</code></li>-->
-<!--                                <li>Version: <code>0.3</code></li>-->
-<!--                                <li>Quarkus Version: <code>2.10.3.Final</code></li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-                    </div>
-                </div>
-            </div>
+        <nav class="nav">
+            <a href="deduction.html" class="btn btn--ghost">Deducciones</a>
+            <a href="/h2-console" class="btn btn--ghost">Consola H2</a>
+            <button id="bClose" class="btn btn--danger">Cerrar</button>
+        </nav>
+    </header>
+
+    <main class="shell">
+        <div class="lede rise">
+            <h1>Analiza tu estado de cuenta</h1>
+            <p>Sube el estado de cuenta de tu banco y extrae automáticamente impuestos, comisiones, intereses y recargos por mora.</p>
         </div>
-        <div class="header-wrapper">
-            <div class="grid">
-                <div class="header">
-                    <div class="left-column p-1">
-                        <span class="text-white">Opciones : </span>
-                        <a href="deduction.html" class="btn btn-success " >Agregar  nueva deduccion </a>
 
-                        <a href="/h2-console" class="btn btn-warning " >H2 Console </a>
-
-                        <button id="bClose"  class="btn btn-danger " >Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="mainContainer" class="container content-wrapper">
-
-            <div class=" grid">
-                <div class="left-column">
-
+        <div class="workspace">
+            <!-- left: upload form -->
+            <section class="card panel rise" style="animation-delay:.05s">
+                <div class="card__body">
                     <form id="form" method="POST" action="account/analyze" enctype="multipart/form-data">
-                        <div class="form-group" >
-                            <label for="file-uploader-container" >Choose file to upload :</label>
-                            <div class="form-group" id="file-uploader-container">
-                                <div class="form-group" id="file-uploader"> </div>
-                            </div>
+                        <div class="field">
+                            <label class="label" for="file">Archivo</label>
+                            <label class="dropzone" id="dropzone">
+                                <input type="file" name="file" id="file" accept=".csv,.pdf,.xls,.xlsx" required>
+                                <svg class="dropzone__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                <span class="dropzone__prompt">Arrastra o haz clic</span>
+                                <span class="dropzone__hint">CSV, PDF o Excel</span>
+                                <span class="dropzone__file" id="fileName"></span>
+                            </label>
                         </div>
-                        <div class="form-group" >
-                            <label for="bank" >Seleccione Banco :</label>
-                            <select  class="form-control" name="bank" id="bank">
-<!--                                <option value="-1">Seleccione: </option>-->
-                                <option value="PopularPDF">Popular PDF</option>
-                                <option value="Popular">Popular CSV</option>
-                                <option value="BHD">BHD (Alpha)</option>
-                                <option value="BHDPDF">BHD PDF (Alpha)</option>
-                                <option value="Scotiabank">Scotiabank (pre-Alpha)</option>
+
+                        <div class="field">
+                            <label class="label" for="bank">Banco</label>
+                            <select class="select" name="bank" id="bank">
+                                <option value="PopularPDF">Popular · PDF</option>
+                                <option value="Popular">Popular · CSV</option>
+                                <option value="BHD">BHD · Excel (Alpha)</option>
+                                <option value="BHDPDF">BHD · PDF (Alpha)</option>
+                                <option value="Scotiabank">Scotiabank · PDF (pre-Alpha)</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="pass" >Password :</label>
-                            <input  class="form-control" type="password" name="pass" id="pass" value="">
+
+                        <div class="field">
+                            <label class="label" for="pass">Contraseña del PDF</label>
+                            <input class="input" type="password" name="pass" id="pass" autocomplete="off" placeholder="Opcional">
                         </div>
-                        <div  class="btn btn-primary" id="button"></div>
+
+                        <button type="submit" class="btn btn--primary btn--block" id="button">
+                            Analizar
+                        </button>
                     </form>
-<br>
-                    <h3>Result of Analysis : </h3>
-
-                    <ul class=" list-group provided-code">
-                        <li id="commissions" class="list-group-item text-category">Commissions :
-                            <ul id="commissionsTrans" class="provided-code"></ul>
-                        </li>
-                        <li id="interest" class="list-group-item text-category" >Interest :
-                            <ul id="interestTrans" class="provided-code"></ul>
-                        </li>
-                        <li id="nonPaymentFee" class="list-group-item text-category" >NonPaymentFee :
-                            <ul id="nonPaymentFeeTrans" class="provided-code"></ul>
-                        </li>
-                        <li id="taxes" class="list-group-item text-category">Taxes :
-                            <ul id="taxesTrans" class="provided-code"></ul>
-                        </li>
-                        <li id="userInterest" class="list-group-item text-category">User Interest :
-                            <ul  id="userInterestTrans" class="provided-code"></ul>
-                        </li>
-                    </ul>
-                    <br>
-                    <p> <b>Total :</b> <span id="total"></span></p>
-                    <br>
-                    <ul class=" list-group provided-code">
-                        <li id="userInterestOutTotal" class="list-group-item text-category">User Interest Sin Afectar el Total :
-                            <ul id="userInterestOutTotalTrans" class="provided-code"></ul>
-                        </li>
-                    </ul>
-                    <br>
-
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <script src="index.js"></script>
-    </body>
+            <!-- right: results -->
+            <section class="card results rise" id="results" style="animation-delay:.1s">
+                <div class="state" id="emptyState">
+                    <svg class="state__icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>
+                    <h3>Sin análisis aún</h3>
+                    <p>Selecciona un archivo y un banco, luego presiona <strong>Analizar</strong> para ver el desglose.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="index.js?v=1"></script>
+</body>
 </html>

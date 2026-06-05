@@ -37,3 +37,7 @@ nb-configuration.xml
 
 # Local environment
 .env
+
+# Runtime-generated
+data/
+.playwright-mcp/

@@ -1,69 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Account-analyzer</title>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deducciones · Account Analyzer</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8b339'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%231a1205'%3EA%3C/text%3E%3C/svg%3E">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="index.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-        <script src="deduction.js"></script>
+    <link rel="stylesheet" href="app.css?v=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="deduction.js?v=1"></script>
+</head>
+<body>
+    <header class="appbar">
+        <div class="brand">
+            <div class="brand__mark">A</div>
+            <div class="brand__name">Account <span>Analyzer</span></div>
+        </div>
+        <nav class="nav">
+            <a href="/" class="btn btn--ghost">← Inicio</a>
+        </nav>
+    </header>
 
-    </head>
-    <body>
-        <div class="container content-wrapper">
+    <main class="shell">
+        <div class="lede rise">
+            <h1>Reglas de deducción</h1>
+            <p>Define qué descripciones de transacción cuentan para cada categoría. El analizador hace coincidir estas reglas con el texto de cada movimiento.</p>
+        </div>
 
-            <div class="grid">
-                <div class="left-column">
-
-                    <h2>Crear Deducción: </h2>
-                    <br/>
-                    <form id="form" method="POST" action="deduction" enctype="multipart/form-data" >
-                        <div   class="form-group" >
-
-                            <label for="type" >Seleccione Tipo de Deducción :</label>
-                            <select name="type" id="type" class="form-control">
-<!--                                <option value="-1">Seleccione: </option>-->
+        <div class="workspace">
+            <section class="card panel rise" style="animation-delay:.05s">
+                <div class="card__body">
+                    <form id="form" method="POST" action="deduction" enctype="multipart/form-data">
+                        <div class="field">
+                            <label class="label" for="type">Tipo de deducción</label>
+                            <select name="type" id="type" class="select">
                                 <option value="COMMISSIONS">Comisiones</option>
                                 <option value="TAXES">Impuestos</option>
                                 <option value="INTEREST">Intereses</option>
-                                <option value="NON_PAYMENT_FEE">Recargos( mora ) </option>
-                                <option value="USER_INTEREST">De Interés Del Usuario </option>
-                                <option value="USER_INTEREST_OUT_TOTAL">De Interés Del Usuario (fuera del Total) </option>
+                                <option value="NON_PAYMENT_FEE">Recargos (mora)</option>
+                                <option value="USER_INTEREST">Interés del usuario</option>
+                                <option value="USER_INTEREST_OUT_TOTAL">Interés del usuario (fuera del total)</option>
                             </select>
                         </div>
-                        <div  class="form-group" >
-                            <label for="description" >Descripción Deducción :</label>
-                            <input class="form-control" type="text" name="description" id="description" value="">
+                        <div class="field">
+                            <label class="label" for="description">Descripción</label>
+                            <input class="input" type="text" name="description" id="description"
+                                   placeholder="p. ej. CARGO POR SERVICIO" required>
                         </div>
-                        <div>
-
-                        <button id="button-send" class="btn btn-primary"> Crear </button>
-<!--                        <a  class="btn btn-primary" href="deduction/list"> Ver Deducciones</a>-->
-                        <a  class="btn btn-success" href="/"> Ir A Inicio</a>
-                        </div>
+                        <button id="button-send" type="submit" class="btn btn--primary btn--block">Crear regla</button>
                     </form>
-
                 </div>
-            </div>
-            <br>
-            <h4>Deduciones Creadas : </h4>
-            <div >
-                <table id="dataTable-deductions" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                </table>
+            </section>
 
-            </div>
+            <section class="card rise" style="animation-delay:.1s">
+                <div class="total-hero" style="padding-bottom:1.2rem">
+                    <span class="total-hero__label">Reglas creadas</span>
+                    <span class="total-hero__value tnum" id="ruleCount" style="font-size:1.8rem">0</span>
+                </div>
+                <div class="table-wrap">
+                    <table class="dtable">
+                        <thead>
+                            <tr><th>ID</th><th>Tipo</th><th>Descripción</th><th></th></tr>
+                        </thead>
+                        <tbody id="rows"></tbody>
+                    </table>
+                </div>
+                <div id="emptyRules" class="toast-empty">Aún no hay reglas. Crea la primera a la izquierda.</div>
+            </section>
         </div>
-    </body>
+    </main>
+</body>
 </html>
